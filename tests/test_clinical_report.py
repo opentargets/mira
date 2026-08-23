@@ -86,8 +86,34 @@ def test_drop_duplicates_best_stage_always_wins():
     )
     winner = ClinicalReport.drop_duplicates(df)
     assert winner.height == 1
-    # APPROVAL (rank 1) beats UNKNOWN (rank 11) despite being third-party
+    # APPROVAL (rank 3) beats UNKNOWN (rank 13) despite being third-party
     assert winner["provider"].to_list()[0] == ClinicalProvider.CHEMBL.value
+
+
+def test_drop_duplicates_withdrawal_beats_approval():
+    """WITHDRAWAL (rank 1) beats APPROVAL (rank 3) — no remap, reports stay truthful."""
+    df = _report_frame(
+        [
+            {
+                "id": "emea/h/c/000123",
+                "source": ClinicalSource.EMA.value,
+                "provider": ClinicalProvider.CHEMBL.value,
+                "phaseFromSource": "APPROVAL",
+                "clinicalStage": "APPROVAL",
+            },
+            {
+                "id": "emea/h/c/000123",
+                "source": ClinicalSource.EMA_HUMAN_DRUGS.value,
+                "provider": ClinicalProvider.EMA.value,
+                "phaseFromSource": "withdrawn",
+                "clinicalStage": "WITHDRAWAL",
+            },
+        ]
+    )
+    winner = ClinicalReport.drop_duplicates(df)
+    assert winner.height == 1
+    assert winner["clinicalStage"].to_list()[0] == "WITHDRAWAL"
+    assert winner["provider"].to_list()[0] == ClinicalProvider.EMA.value
 
 
 def test_drop_duplicates_non_owner_tie_is_deterministic():

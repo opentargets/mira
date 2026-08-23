@@ -10,17 +10,19 @@ from clinical_mining.schemas import (
 
 # Category ranking for Maximum Clinical Development Status
 CATEGORY_RANKS = {
-    ClinicalStageCategory.APPROVAL: 1,
-    ClinicalStageCategory.PREAPPROVAL: 2,
-    ClinicalStageCategory.PHASE_3: 3,
-    ClinicalStageCategory.PHASE_2_3: 4,
-    ClinicalStageCategory.PHASE_2: 5,
-    ClinicalStageCategory.PHASE_1_2: 6,
-    ClinicalStageCategory.PHASE_1: 7,
-    ClinicalStageCategory.EARLY_PHASE_1: 8,
-    ClinicalStageCategory.IND: 9,
-    ClinicalStageCategory.PRECLINICAL: 10,
-    ClinicalStageCategory.UNKNOWN: 11,
+    ClinicalStageCategory.WITHDRAWAL: 1,
+    ClinicalStageCategory.PHASE_4: 2,
+    ClinicalStageCategory.APPROVAL: 3,
+    ClinicalStageCategory.PREAPPROVAL: 4,
+    ClinicalStageCategory.PHASE_3: 5,
+    ClinicalStageCategory.PHASE_2_3: 6,
+    ClinicalStageCategory.PHASE_2: 7,
+    ClinicalStageCategory.PHASE_1_2: 8,
+    ClinicalStageCategory.PHASE_1: 9,
+    ClinicalStageCategory.EARLY_PHASE_1: 10,
+    ClinicalStageCategory.IND: 11,
+    ClinicalStageCategory.PRECLINICAL: 12,
+    ClinicalStageCategory.UNKNOWN: 13,
 }
 
 CATEGORY_RANKS_STR = {k.value: v for k, v in CATEGORY_RANKS.items()}
