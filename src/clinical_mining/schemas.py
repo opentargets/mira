@@ -114,7 +114,6 @@ class ClinicalReportOrigin(str, Enum):
     DRUG_LABEL = "DRUG_LABEL"
     REGULATORY = "REGULATORY_AGENCY"
     CURATED_RESOURCE = "CURATED_RESOURCE"
-    OTHER = "OTHER"
 
 
 class ClinicalReportType(str, Enum):
