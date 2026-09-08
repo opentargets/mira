@@ -1,6 +1,7 @@
 """Extraction of clinical reports from ChEMBL drug/indications dataset."""
 
 import polars as pl
+import polars_hash as plh
 
 from clinical_mining.dataset import ClinicalReport
 from clinical_mining.dataset.clinical_report import APPROVAL_SOURCES
@@ -42,7 +43,7 @@ def extract_clinical_report(
             id=(
                 pl.when(pl.col("ref_type") == "INN")
                 .then(
-                    pl.concat_str(
+                    plh.concat_str(
                         pl.col("ref_id"),
                         pl.lit("/"),
                         pl.col("efo_term"),
@@ -92,6 +93,7 @@ def extract_clinical_report(
             type=pl.lit(ClinicalReportType.INDICATION.value),
         )
         .explode("id")
+        .with_columns(id=pl.col("id").chash.sha2_256())
         .unique()
     )
 
