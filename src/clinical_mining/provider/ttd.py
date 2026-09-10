@@ -1,4 +1,5 @@
 import polars as pl
+import polars_hash as plh
 
 from clinical_mining.dataset.clinical_report import ClinicalReport
 from clinical_mining.schemas import (
@@ -69,9 +70,10 @@ def extract_clinical_report(
 ) -> ClinicalReport:
     """Extract clinical reports from TTD drug/disease dataset."""
     reports = indications.select(
-        id=pl.concat_str(
-            [pl.col("ttd_id"), pl.lit("/"), pl.col("diseaseFromSource")]
-        ).str.to_lowercase(),
+        id=plh.concat_str(
+            pl.col("ttd_id"),
+            pl.col("diseaseFromSource").str.to_lowercase(),
+        ).chash.sha2_256(),
         origin=pl.lit(ClinicalReportOrigin.CURATED_RESOURCE),
         url=pl.concat_str(
             [pl.lit("https://ttd.idrblab.cn/data/drug/details/"), pl.col("ttd_id")]
