@@ -5,6 +5,7 @@ from typing import Literal
 import polars as pl
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.types import (
+    ArrayType,
     BooleanType,
     DateType,
     DoubleType,
@@ -21,6 +22,12 @@ JoinHow = Literal["inner", "left", "right", "full", "semi", "anti", "cross"]
 
 def polars_to_spark_type(polars_type):
     """Map Polars data types to PySpark data types."""
+    if isinstance(polars_type, pl.List):
+        return ArrayType(
+            polars_to_spark_type(polars_type.inner),
+            containsNull=True,
+        )
+
     type_mapping = {
         pl.String: StringType(),
         pl.Int32: IntegerType(),
@@ -31,6 +38,17 @@ def polars_to_spark_type(polars_type):
         pl.Datetime: TimestampType(),
     }
     return type_mapping.get(polars_type, StringType())  # Default to String if unmapped
+
+
+def _polars_to_pandas(polars_df: pl.DataFrame):
+    """Convert Polars list cells to Python lists for Spark's pandas adapter."""
+    pandas_df = polars_df.to_pandas()
+    for column, polars_type in polars_df.schema.items():
+        if isinstance(polars_type, pl.List):
+            pandas_df[column] = pandas_df[column].map(
+                lambda value: value.tolist() if hasattr(value, "tolist") else value
+            )
+    return pandas_df
 
 
 def convert_polars_to_spark(
@@ -59,14 +77,16 @@ def convert_polars_to_spark(
 
     if total_rows <= chunk_size:
         # For small DataFrames, use direct conversion with schema
-        return spark.createDataFrame(polars_df.to_pandas(), schema=spark_schema)
+        return spark.createDataFrame(_polars_to_pandas(polars_df), schema=spark_schema)
 
     # Process in chunks for large DataFrames
     spark_chunks = []
 
     for i in range(0, total_rows, chunk_size):
         chunk = polars_df.slice(i, chunk_size)
-        chunk_spark = spark.createDataFrame(chunk.to_pandas(), schema=spark_schema)
+        chunk_spark = spark.createDataFrame(
+            _polars_to_pandas(chunk), schema=spark_schema
+        )
         spark_chunks.append(chunk_spark)
 
     # Union all chunks into single DataFrame

@@ -34,6 +34,7 @@ datasets:
   ttd_path: ${oc.env:HOME}/EBI/repos/clinical_mining/data/inputs/P1-05-Drug_disease.txt
   ema_path: ${oc.env:HOME}/EBI/repos/clinical_mining/data/inputs/medicines-output-medicines-report_en.xlsx
   pmda_path: ${oc.env:HOME}/EBI/repos/clinical_mining/data/inputs/pmda_approvals.pdf
+  fda_nme_path: ${oc.env:HOME}/EBI/repos/clinical_mining/data/inputs/2026 Compilation_of_CDER_NME_and_New_Biologic_Approvals_1985-2025.xlsx
   llm_results: ${oc.env:HOME}/EBI/repos/pipeline_work/input/clinical_report/aact_extraction_batch_results
   output_path: ${oc.env:HOME}/EBI/repos/clinical_mining/data/outputs
 
