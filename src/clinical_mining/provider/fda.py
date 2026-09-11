@@ -74,6 +74,7 @@ def extract_clinical_report(
             year=pl.col("Approval Year").cast(pl.Int32, strict=False),
             source=pl.lit(ClinicalSource.FDA_NME_COMPILATION.value),
             provider=pl.lit(ClinicalProvider.FDA.value),
+            countries=pl.lit(["United States"], dtype=pl.List(pl.String)),
             url=pl.concat_str(
                 pl.lit(DRUGS_AT_FDA_APPLICATION_URL),
                 pl.col("Application Number(1)").cast(pl.String),

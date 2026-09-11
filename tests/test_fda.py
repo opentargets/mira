@@ -81,6 +81,7 @@ def test_extract_clinical_report_uses_both_indication_columns(monkeypatch):
         "FDA NME Compilation",
     ]
     assert reports["provider"].to_list() == ["FDA", "FDA"]
+    assert reports["countries"].to_list() == [["United States"], ["United States"]]
     assert sorted(
         drug["drugFromSource"] for drug in reports.row(1, named=True)["drugs"]
     ) == ["deutivacaftor", "tezacaftor", "vanzacaftor"]
