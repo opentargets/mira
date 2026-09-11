@@ -38,6 +38,10 @@ This project provides tools to fetch, process, and annotate clinical trial data 
 
    The PMDA (Pharmaceuticals and Medical Devices Agency) is the Japanese regulatory agency. We use their PDF of approved products to extract drug/disease associations. The PDF can be downloaded from their site: https://www.pmda.go.jp/english/review-services/reviews/approved-information/drugs/0002.html
 
+5. **FDA NME Compilation**
+
+   The FDA compilation of CDER new molecular entity drugs and new biologic approvals supplies the original approval year, NDA/BLA application number, active ingredient or moiety, indication text, and regulatory review designations. Disease entities are extracted from the abbreviated indication or approved-use text. The workbook can be downloaded from https://www.fda.gov/media/177921/download?attachment
+
 ## Usage
 
 ### Configuration
@@ -53,7 +57,7 @@ Run `uv run clinical_mining --help` to see available recipes.
 
 #### 1. Clinical Report Generation
 
-Loads data from all providers (AACT, ChEMBL, TTD, EMA, PMDA), generates clinical reports, maps entities to ChEMBL/EFO IDs, and produces the final clinical indication dataset.
+Loads data from all providers (AACT, ChEMBL, TTD, EMA, FDA, PMDA), generates clinical reports, maps entities to ChEMBL/EFO IDs, and produces the final clinical indication dataset.
 
 ```bash
 uv run clinical_mining +recipe=clinical_report_generation

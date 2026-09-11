@@ -149,7 +149,7 @@ workflow:
         function: clinical_mining.provider.ttd.extract_indication
         parameters:
           ttd_input: ${datasets.ttd_path}
-        
+
       aact_batch_extraction:
         function: clinical_mining.provider.aact.llm_extractor.parse_batch_results
         parameters:
@@ -160,7 +160,7 @@ workflow:
         parameters:
           df: $sponsors
           expr: "lead_or_collaborator == 'lead'"
-      
+
       detailed_descriptions_rename:
         function: clinical_mining.utils.polars_helpers.rename_columns
         parameters:
@@ -224,6 +224,12 @@ workflow:
           df: $pmda_raw
           spark: $spark_session
 
+      fda_report:
+        function: clinical_mining.provider.fda.extract_clinical_report
+        parameters:
+          fda_input: ${datasets.fda_nme_path}
+          spark: $spark_session
+
     # POST-PROCESS: Final transformation steps on the unified DataFrame
     post_process:
       chembl_indication_report_filter:
@@ -235,7 +241,7 @@ workflow:
       all_reports:
         function: clinical_mining.utils.polars_helpers.union_dfs
         parameters:
-          dfs: [$aact_report, $ttd_report, $ema_report, $pmda_report, $chembl_indication_report_filter, $chembl_drug_warning_report]
+          dfs: [$aact_report, $ttd_report, $ema_report, $pmda_report, $chembl_indication_report_filter, $chembl_drug_warning_report, $fda_report]
 
       output_clinical_report:
         function: clinical_mining.dataset.ClinicalReport.map_entities

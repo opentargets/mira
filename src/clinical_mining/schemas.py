@@ -46,6 +46,7 @@ class ClinicalSource(str, Enum):
 
     DailyMed = "DailyMed"
     FDA = "FDA"
+    FDA_NME_COMPILATION = "FDA NME Compilation"
     EMA_HUMAN_DRUGS = "EMA Human Drugs"
     TTD = "TTD"
     PMDA = "PMDA"
@@ -84,6 +85,7 @@ class ClinicalProvider(str, Enum):
     AACT = "AACT"
     CHEMBL = "ChEMBL"
     EMA = "EMA"
+    FDA = "FDA"
     PMDA = "PMDA"
     TTD = "TTD"
 
@@ -101,6 +103,7 @@ class ClinicalProvider(str, Enum):
             cls.AACT.value: {ClinicalSource.CLINICAL_TRIALS_GOV.value},
             cls.CHEMBL.value: set(),
             cls.EMA.value: {ClinicalSource.EMA_HUMAN_DRUGS.value},
+            cls.FDA.value: {ClinicalSource.FDA_NME_COMPILATION.value},
             cls.PMDA.value: {ClinicalSource.PMDA.value},
             cls.TTD.value: {ClinicalSource.TTD.value},
         }

@@ -94,7 +94,14 @@ PHASE_TO_CATEGORY_MAP = {
 
 
 # Sources that indicate approved status when phase is null
-APPROVAL_SOURCES = {"ATC", "EMA", "FDA", "DailyMed", "PMDA"}
+APPROVAL_SOURCES = {
+    "ATC",
+    "EMA",
+    "FDA",
+    "FDA NME Compilation",
+    "DailyMed",
+    "PMDA",
+}
 
 
 def map_phase_to_category(
