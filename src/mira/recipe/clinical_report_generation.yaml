@@ -7,7 +7,7 @@
 # indication dataset.
 #
 # Usage:
-#   uv run clinical_mining +recipe=clinical_report_generation
+#   uv run mira +recipe=clinical_report_generation
 # =================================================
 
 
@@ -141,28 +141,28 @@ workflow:
     # SETUP: Steps to prepare data needed by later stages
     setup:
       pmda_raw:
-        function: clinical_mining.provider.pmda.parse_pmda_approvals
+        function: mira.provider.pmda.parse_pmda_approvals
         parameters:
           pmda: ${datasets.pmda_path}
 
       ttd_raw:
-        function: clinical_mining.provider.ttd.extract_indication
+        function: mira.provider.ttd.extract_indication
         parameters:
           ttd_input: ${datasets.ttd_path}
         
       aact_batch_extraction:
-        function: clinical_mining.provider.aact.llm_extractor.parse_batch_results
+        function: mira.provider.aact.llm_extractor.parse_batch_results
         parameters:
           output_dir: ${datasets.llm_results}
 
       lead_sponsors:
-        function: clinical_mining.utils.polars_helpers.filter_df
+        function: mira.utils.polars_helpers.filter_df
         parameters:
           df: $sponsors
           expr: "lead_or_collaborator == 'lead'"
       
       detailed_descriptions_rename:
-        function: clinical_mining.utils.polars_helpers.rename_columns
+        function: mira.utils.polars_helpers.rename_columns
         parameters:
           df: $detailed_descriptions
           col_names_map: {"description": "detailed_description"}
@@ -170,21 +170,21 @@ workflow:
     # GENERATE: Steps that generate the core drug/indication DataFrames
     generate:
       chembl_indication_report:
-        function: clinical_mining.provider.chembl.indications.extract_clinical_report
+        function: mira.provider.chembl.indications.extract_clinical_report
         parameters:
           drug_indication: $drug_indication
           molecule_dictionary: $molecule_dictionary
           indication_refs: $indication_refs
 
       chembl_drug_warning_report:
-        function: clinical_mining.provider.chembl.drug_warnings.extract_clinical_report
+        function: mira.provider.chembl.drug_warnings.extract_clinical_report
         parameters:
           drug_warning: $drug_warning
           molecule_dictionary: $molecule_dictionary
           warning_refs: $warning_refs
 
       aact_report:
-        function: clinical_mining.provider.aact.extract_clinical_report
+        function: mira.provider.aact.extract_clinical_report
         parameters:
           studies: $studies
           interventions: $interventions
@@ -208,18 +208,18 @@ workflow:
           llm_extractions: $aact_batch_extraction
 
       ttd_report:
-        function: clinical_mining.provider.ttd.extract_clinical_report
+        function: mira.provider.ttd.extract_clinical_report
         parameters:
           indications: $ttd_raw
 
       ema_report:
-        function: clinical_mining.provider.ema.extract_clinical_report
+        function: mira.provider.ema.extract_clinical_report
         parameters:
           ema_input: ${datasets.ema_path}
           spark: $spark_session
 
       pmda_report:
-        function: clinical_mining.provider.pmda.extract_clinical_report
+        function: mira.provider.pmda.extract_clinical_report
         parameters:
           df: $pmda_raw
           spark: $spark_session
@@ -227,18 +227,18 @@ workflow:
     # POST-PROCESS: Final transformation steps on the unified DataFrame
     post_process:
       chembl_indication_report_filter:
-        function: clinical_mining.utils.polars_helpers.filter_df
+        function: mira.utils.polars_helpers.filter_df
         parameters:
           df: $chembl_indication_report
           expr: "source != 'ClinicalTrials'"
 
       all_reports:
-        function: clinical_mining.utils.polars_helpers.union_dfs
+        function: mira.utils.polars_helpers.union_dfs
         parameters:
           dfs: [$aact_report, $ttd_report, $ema_report, $pmda_report, $chembl_indication_report_filter, $chembl_drug_warning_report]
 
       output_clinical_report:
-        function: clinical_mining.dataset.ClinicalReport.map_entities
+        function: mira.dataset.ClinicalReport.map_entities
         parameters:
           spark: $spark_session
           reports: $all_reports
@@ -252,6 +252,6 @@ workflow:
           ner_cache_path: ".cache/ner/ner_cache.parquet"
 
       output_clinical_indication:
-        function: clinical_mining.dataset.ClinicalIndication.from_report
+        function: mira.dataset.ClinicalIndication.from_report
         parameters:
           report: $output_clinical_report

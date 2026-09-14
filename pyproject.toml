@@ -1,9 +1,20 @@
 [project]
-name = "clinical-mining"
+name = "opentargets-mira"
 version = "0.9.0"
-description = "Add your description here"
+description = "Clinical trial data mining and integration for drug discovery"
 readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Open Targets" }]
 requires-python = ">=3.11"
+keywords = ["clinical-trials", "drug-discovery", "open-targets"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
 dependencies = [
     "altair>=5.5.0",
     "connectorx>=0.4.3",
@@ -23,8 +34,13 @@ dependencies = [
     "biopython>=1.87",
 ]
 
+[project.urls]
+Homepage = "https://github.com/opentargets/mira"
+Repository = "https://github.com/opentargets/mira"
+Issues = "https://github.com/opentargets/mira/issues"
+
 [project.scripts]
-clinical_mining = "clinical_mining.cli:main"
+mira = "mira.cli:main"
 
 [project.optional-dependencies]
 oracle = [
@@ -32,7 +48,7 @@ oracle = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/clinical_mining"]
+packages = ["src/mira"]
 
 [build-system]
 requires = ["hatchling"]

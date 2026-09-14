@@ -1,8 +1,8 @@
 import polars as pl
 import polars_hash as plh
 
-from clinical_mining.dataset.clinical_report import ClinicalReport
-from clinical_mining.schemas import (
+from mira.dataset.clinical_report import ClinicalReport
+from mira.schemas import (
     ClinicalProvider,
     ClinicalReportOrigin,
     ClinicalReportType,

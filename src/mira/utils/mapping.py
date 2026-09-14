@@ -7,7 +7,7 @@ from ontoma import OnToma, OpenTargetsDisease, OpenTargetsDrug
 from ontoma.ner.drug import extract_drug_entities
 from pyspark.sql import DataFrame, SparkSession
 
-from clinical_mining.utils.polars_helpers import convert_polars_to_spark
+from mira.utils.polars_helpers import convert_polars_to_spark
 
 
 def _normalise_label_expr(col_name: str) -> pl.Expr:

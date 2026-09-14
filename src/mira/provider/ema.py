@@ -5,14 +5,14 @@ from loguru import logger
 from ontoma.ner.disease import extract_disease_entities
 from pyspark.sql import SparkSession
 
-from clinical_mining.dataset import ClinicalReport
-from clinical_mining.schemas import (
+from mira.dataset import ClinicalReport
+from mira.schemas import (
     ClinicalProvider,
     ClinicalReportOrigin,
     ClinicalReportType,
     ClinicalSource,
 )
-from clinical_mining.utils.polars_helpers import convert_polars_to_spark
+from mira.utils.polars_helpers import convert_polars_to_spark
 
 
 def extract_marketing_year(marketing_date: str | None) -> int | None:

@@ -5,8 +5,8 @@
 # that all recipes may use. It does not define any workflows on its own.
 #
 # Add a recipe to activate a workflow:
-#   uv run clinical_mining +recipe=clinical_report_generation
-#   uv run clinical_mining +recipe=aact_extractor
+#   uv run mira +recipe=clinical_report_generation
+#   uv run mira +recipe=aact_extractor
 #
 # See README.md for full documentation.
 # =================================================
@@ -29,13 +29,14 @@ db_properties:
 
 # Path Definitions for Local Datasets
 datasets:
+  data_root: ${oc.env:MIRA_DATA_DIR,data}
   disease_index_path: ${oc.env:HOME}/EBI/repos/pipeline_work/output/disease
   molecule_index_path: ${oc.env:HOME}/EBI/repos/pipeline_work/intermediate/chembl_molecule
-  ttd_path: ${oc.env:HOME}/EBI/repos/clinical_mining/data/inputs/P1-05-Drug_disease.txt
-  ema_path: ${oc.env:HOME}/EBI/repos/clinical_mining/data/inputs/medicines-output-medicines-report_en.xlsx
-  pmda_path: ${oc.env:HOME}/EBI/repos/clinical_mining/data/inputs/pmda_approvals.pdf
+  ttd_path: ${datasets.data_root}/inputs/P1-05-Drug_disease.txt
+  ema_path: ${datasets.data_root}/inputs/medicines-output-medicines-report_en.xlsx
+  pmda_path: ${datasets.data_root}/inputs/pmda_approvals.pdf
   llm_results: ${oc.env:HOME}/EBI/repos/pipeline_work/input/clinical_report/aact_extraction_batch_results
-  output_path: ${oc.env:HOME}/EBI/repos/clinical_mining/data/outputs
+  output_path: ${datasets.data_root}/outputs
 
 # Workflow (populated by recipes)
 workflow: null

@@ -7,8 +7,8 @@
 # indications, investigated drugs, comparators, and supportive medications.
 #
 # Usage:
-#   uv run clinical_mining +recipe=aact_llm_extractor
-#   uv run clinical_mining +recipe=aact_llm_extractor \
+#   uv run mira +recipe=aact_llm_extractor
+#   uv run mira +recipe=aact_llm_extractor \
 #       workflow.transform.generate.filtered_report.parameters.id_value=NCT00002742 \
 #       workflow.transform.generate.output_llm_extraction.parameters.inspect_mode=true
 # =================================================
@@ -61,7 +61,7 @@ workflow:
   transform:
     setup:
       clinical_report:
-        function: clinical_mining.provider.aact.extract_clinical_report
+        function: mira.provider.aact.extract_clinical_report
         parameters:
           studies: $studies
           interventions: $interventions
@@ -78,27 +78,27 @@ workflow:
 
     generate:
       filtered_report:
-        function: clinical_mining.provider.aact.llm_extractor.filter_by_id
+        function: mira.provider.aact.llm_extractor.filter_by_id
         parameters:
           report: $clinical_report
           id_value: null
 
       sampled_report:
-        function: clinical_mining.provider.aact.llm_extractor.sample_report
+        function: mira.provider.aact.llm_extractor.sample_report
         parameters:
           report: $filtered_report
           sample_size: 100
           seed: 42
 
       publications_map:
-        function: clinical_mining.provider.aact.llm_extractor.fetch_publications
+        function: mira.provider.aact.llm_extractor.fetch_publications
         parameters:
           report: $sampled_report
           max_publications: 1
           enabled: true
 
       prompts:
-        function: clinical_mining.provider.aact.llm_extractor.build_prompts
+        function: mira.provider.aact.llm_extractor.build_prompts
         parameters:
           report: $sampled_report
           trial_fields:
@@ -108,14 +108,14 @@ workflow:
           publications_map: $publications_map
 
       output_llm_extraction:
-        function: clinical_mining.workflows.llm.run_extraction
+        function: mira.workflows.llm.run_extraction
         parameters:
           prompts: $prompts
-          model_class: clinical_mining.schemas.ClinicalReportExtractionSchema
-          system_prompt_path: src/clinical_mining/prompts/aact_llm.txt
-          model: gpt-4.1-mini
+          model_class: mira.schemas.ClinicalReportExtractionSchema
+          system_prompt_path: package://mira/prompts/aact_llm.txt
+          model: gpt-5-nano-2025-08-07
           openai_key: ${oc.env:OPENAI_API_KEY,""}
-          service_tier: flex
+          service_tier: auto
           concurrency: 50
           max_retries: 2
           errors_dir: $output_dir

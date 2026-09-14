@@ -1,4 +1,6 @@
-# Clinical Trial Mining
+# MIRA
+
+MIRA provides clinical trial data mining and integration tools for drug discovery.
 
 ## Motivation
 
@@ -40,6 +42,20 @@ This project provides tools to fetch, process, and annotate clinical trial data 
 
 ## Usage
 
+### Installation
+
+Install MIRA from PyPI:
+
+```bash
+pip install opentargets-mira
+```
+
+To include Oracle support:
+
+```bash
+pip install "opentargets-mira[oracle]"
+```
+
 ### Configuration
 
 The project uses a **base config + recipes** pattern:
@@ -47,7 +63,7 @@ The project uses a **base config + recipes** pattern:
 - **`config.yaml`** — minimal shared infrastructure (database connections, path definitions)
 - **`recipe/`** — workflow-specific configurations that extend the base
 
-Run `uv run clinical_mining --help` to see available recipes.
+Run `uv run mira --help` to see available recipes.
 
 ### Workflows
 
@@ -56,7 +72,7 @@ Run `uv run clinical_mining --help` to see available recipes.
 Loads data from all providers (AACT, ChEMBL, TTD, EMA, PMDA), generates clinical reports, maps entities to ChEMBL/EFO IDs, and produces the final clinical indication dataset.
 
 ```bash
-uv run clinical_mining +recipe=clinical_report_generation
+uv run mira +recipe=clinical_report_generation
 ```
 
 #### 2. LLM Extraction
@@ -65,18 +81,18 @@ Loads clinical trial data from AACT and uses an LLM (via OpenAI) to extract stru
 
 ```bash
 # Batch extraction with defaults
-uv run clinical_mining +recipe=aact_llm_extractor
+uv run mira +recipe=aact_llm_extractor
 
 # Single-trial inspect mode (prints to stdout, no output written)
-uv run clinical_mining +recipe=aact_llm_extractor \
+uv run mira +recipe=aact_llm_extractor \
   workflow.transform.generate.filtered_report.parameters.id_value=NCT00002742
 
 # Override any config value
-uv run clinical_mining +recipe=aact_llm_extractor \
+uv run mira +recipe=aact_llm_extractor \
   workflow.transform.generate.output_llm_extraction.parameters.model=gpt-4o
 
 # Enable publications enrichment
-uv run clinical_mining +recipe=aact_llm_extractor \
+uv run mira +recipe=aact_llm_extractor \
   workflow.transform.generate.publications_map.parameters.enabled=true
 ```
 ### Configuring a Workflow Step
@@ -88,7 +104,7 @@ workflow:
   transform:
     generate:
       my_step:                        # step name (becomes data_store key)
-        function: clinical_mining...  # full Python path
+        function: mira...  # full Python path
         parameters:
           input: $previous_step       # reference another step's output
           literal_value: 42           # literal values passed as-is
@@ -97,7 +113,7 @@ workflow:
 To override step parameters from the command line, use the full path:
 
 ```bash
-uv run clinical_mining +recipe=aact_llm_extractor \
+uv run mira +recipe=aact_llm_extractor \
   workflow.transform.generate.filtered_report.parameters.id_value=NCT00002742
 ```
 
@@ -118,6 +134,7 @@ Any step whose name starts with `output_` is automatically persisted:
 | `AACT_USER` | AACT database access (optional for localhost) |
 | `AACT_PASSWORD` | AACT database access (optional for localhost) |
 | `OPENAI_API_KEY` | LLM extraction workflow |
+| `MIRA_DATA_DIR` | Local input and output directory (defaults to `data`) |
 
 ### Contribute
 

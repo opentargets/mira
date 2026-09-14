@@ -2,7 +2,7 @@
 
 import polars as pl
 
-from clinical_mining.utils.db import load_oracle_table
+from mira.utils.db import load_oracle_table
 
 
 def extract_chembl_ct_curation(
