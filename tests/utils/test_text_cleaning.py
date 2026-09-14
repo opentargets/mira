@@ -1,4 +1,4 @@
-from clinical_mining.utils.text_cleaning import sanitise_nested, sanitise_text
+from mira.utils.text_cleaning import sanitise_nested, sanitise_text
 
 
 class TestSanitiseText:

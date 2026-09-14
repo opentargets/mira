@@ -1,7 +1,7 @@
 import polars as pl
 import polars_hash as plh
 
-from clinical_mining.schemas import (
+from mira.schemas import (
     ClinicalIndicationSchema,
     ClinicalReportSchema,
     ClinicalStageCategory,

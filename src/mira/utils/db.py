@@ -122,7 +122,7 @@ def load_oracle_query(
     Uses cx_Oracle connection with Polars' read_database().
 
     Raises:
-        ImportError: If cx-oracle is not installed. Install with: pip install clinical-mining[oracle]
+        ImportError: If cx-oracle is not installed. Install with: pip install opentargets-mira[oracle]
     """
     if not _ORACLE_AVAILABLE:
         raise ImportError(
@@ -172,7 +172,7 @@ def load_oracle_table(
         )
 
     Raises:
-        ImportError: If cx-oracle is not installed. Install with: pip install clinical-mining[oracle]
+        ImportError: If cx-oracle is not installed. Install with: pip install opentargets-mira[oracle]
     """
     if not _ORACLE_AVAILABLE:
         raise ImportError(

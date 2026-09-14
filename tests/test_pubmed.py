@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock, patch
 
-from clinical_mining.provider.pubmed import (
+from mira.provider.pubmed import (
     build_publications_map,
     fetch_publications,
 )
@@ -69,8 +69,8 @@ def test_fetch_publications_empty_list():
 def test_fetch_publications_success():
     handle = _mock_entrez_read(TWO_ARTICLES)
     with (
-        patch("clinical_mining.provider.pubmed.Entrez.efetch", return_value=handle),
-        patch("clinical_mining.provider.pubmed.Entrez.read", return_value=TWO_ARTICLES),
+        patch("mira.provider.pubmed.Entrez.efetch", return_value=handle),
+        patch("mira.provider.pubmed.Entrez.read", return_value=TWO_ARTICLES),
     ):
         result = fetch_publications([12345678, 99999999])
 
@@ -93,8 +93,8 @@ def test_fetch_publications_missing_abstract_becomes_empty_string():
     }
     handle = _mock_entrez_read(no_abstract)
     with (
-        patch("clinical_mining.provider.pubmed.Entrez.efetch", return_value=handle),
-        patch("clinical_mining.provider.pubmed.Entrez.read", return_value=no_abstract),
+        patch("mira.provider.pubmed.Entrez.efetch", return_value=handle),
+        patch("mira.provider.pubmed.Entrez.read", return_value=no_abstract),
     ):
         result = fetch_publications([11111111])
 
@@ -108,9 +108,9 @@ def test_fetch_publications_retries_on_incomplete_read(capsys):
     handle = _mock_entrez_read(SINGLE_ARTICLE)
     efetch = MagicMock(side_effect=[IncompleteRead(b""), handle])
     with (
-        patch("clinical_mining.provider.pubmed.Entrez.efetch", efetch),
+        patch("mira.provider.pubmed.Entrez.efetch", efetch),
         patch(
-            "clinical_mining.provider.pubmed.Entrez.read",
+            "mira.provider.pubmed.Entrez.read",
             return_value=SINGLE_ARTICLE,
         ),
     ):
@@ -144,9 +144,7 @@ def test_build_publications_map_basic():
         "12345678": {"title": "Paper A", "abstractText": "Abstract A"},
         "99999999": {"title": "Paper B", "abstractText": "Abstract B"},
     }
-    with patch(
-        "clinical_mining.provider.pubmed.fetch_publications", return_value=pub_data
-    ):
+    with patch("mira.provider.pubmed.fetch_publications", return_value=pub_data):
         result = build_publications_map(records, max_pubs=2)
 
     assert len(result["NCT00000001"]) == 2
@@ -165,9 +163,7 @@ def test_build_publications_map_respects_max_pubs():
     pub_data = {
         str(i): {"title": f"Paper {i}", "abstractText": f"Abs {i}"} for i in range(1, 6)
     }
-    with patch(
-        "clinical_mining.provider.pubmed.fetch_publications", return_value=pub_data
-    ):
+    with patch("mira.provider.pubmed.fetch_publications", return_value=pub_data):
         result = build_publications_map(records, max_pubs=3)
 
     assert len(result["NCT00000001"]) == 3
@@ -191,7 +187,7 @@ def test_build_publications_map_deduplicates_pmids():
         },
     ]
     with patch(
-        "clinical_mining.provider.pubmed.fetch_publications", return_value={}
+        "mira.provider.pubmed.fetch_publications", return_value={}
     ) as mock_fetch:
         build_publications_map(records, max_pubs=3)
 

@@ -2,8 +2,8 @@
 
 import polars as pl
 
-from clinical_mining.dataset import ClinicalReport
-from clinical_mining.schemas import (
+from mira.dataset import ClinicalReport
+from mira.schemas import (
     ClinicalProvider,
     ClinicalReportOrigin,
     ClinicalReportType,

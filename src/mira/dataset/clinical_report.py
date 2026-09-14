@@ -1,16 +1,16 @@
 import polars as pl
 from pyspark.sql import DataFrame, SparkSession
 
-from clinical_mining.dataset.clinical_indication import CATEGORY_RANKS_STR
-from clinical_mining.schemas import (
+from mira.dataset.clinical_indication import CATEGORY_RANKS_STR
+from mira.schemas import (
     ClinicalProvider,
     ClinicalReportSchema,
     ClinicalStageCategory,
     snake_to_camel,
     validate_schema,
 )
-from clinical_mining.utils.mapping import map_entities
-from clinical_mining.utils.text_cleaning import sanitise_text
+from mira.utils.mapping import map_entities
+from mira.utils.text_cleaning import sanitise_text
 
 # Clinical status harmonization constants
 PHASE_TO_CATEGORY_MAP = {

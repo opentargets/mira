@@ -8,15 +8,15 @@ import fsspec
 import polars as pl
 from loguru import logger
 
-from clinical_mining.dataset import ClinicalReportExtraction
-from clinical_mining.provider.pubmed import build_publications_map
-from clinical_mining.schemas import (
+from mira.dataset import ClinicalReportExtraction
+from mira.provider.pubmed import build_publications_map
+from mira.schemas import (
     ClinicalReportExtractionSchema,
     ExtractedDisease,
     ExtractedDrug,
 )
-from clinical_mining.utils.text_cleaning import sanitise_nested
-from clinical_mining.workflows.llm import _extractions_to_df
+from mira.utils.text_cleaning import sanitise_nested
+from mira.workflows.llm import _extractions_to_df
 
 
 def filter_by_id(report: pl.DataFrame, id_value: str | None) -> pl.DataFrame:

@@ -7,9 +7,9 @@ import polars as pl
 from loguru import logger
 from omegaconf import DictConfig
 
-from clinical_mining.utils.db import construct_db_uri, load_db_table
-from clinical_mining.utils.pipeline import execute_step, normalise_steps
-from clinical_mining.utils.spark_helpers import spark_session
+from mira.utils.db import construct_db_uri, load_db_table
+from mira.utils.pipeline import execute_step, normalise_steps
+from mira.utils.spark_helpers import spark_session
 
 
 def _run_transform(workflow_cfg: DictConfig, cfg: DictConfig) -> dict[str, Any]:
@@ -97,7 +97,7 @@ def _run_transform(workflow_cfg: DictConfig, cfg: DictConfig) -> dict[str, Any]:
     version_base="1.3", config_path=str(Path(__file__).parent), config_name="config"
 )
 def main(cfg: DictConfig) -> dict[str, Any]:
-    """Main function to run clinical mining workflows."""
+    """Run MIRA workflows."""
     workflow = cfg.get("workflow")
     if not workflow:
         logger.info(

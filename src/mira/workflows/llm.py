@@ -16,6 +16,7 @@ import logging
 import traceback
 from collections.abc import Sequence
 from importlib import import_module
+from importlib.resources import files
 from pathlib import Path
 
 import polars as pl
@@ -25,6 +26,25 @@ from pydantic import BaseModel
 
 logging.getLogger("openai").setLevel(logging.WARNING)
 logging.getLogger("httpcore").setLevel(logging.WARNING)
+
+
+def _read_text(path: str | Path) -> str:
+    """Read a filesystem path or a ``package://`` resource."""
+    path_str = str(path)
+    if not path_str.startswith("package://"):
+        return Path(path).read_text(encoding="utf-8")
+
+    package_path = path_str.removeprefix("package://")
+    package, separator, resource_path = package_path.partition("/")
+    if not separator or not package or not resource_path:
+        raise ValueError(
+            "Package resources must use 'package://<package>/<resource>' syntax."
+        )
+
+    resource = files(package)
+    for part in resource_path.split("/"):
+        resource = resource.joinpath(part)
+    return resource.read_text(encoding="utf-8")
 
 
 def run_extraction(
@@ -44,7 +64,8 @@ def run_extraction(
         prompts: List of dicts with keys "id" and "prompt".
         model_class: Dotted path to a Pydantic model class for response
             validation (e.g. "mypackage.models.TrialExtraction").
-        system_prompt_path: Path to the system prompt text file.
+        system_prompt_path: Filesystem path or ``package://`` URI for the system
+            prompt text file.
         model: OpenAI model identifier. Must support the Responses API and,
             if service_tier="flex", flex processing (see OpenAI pricing page).
         openai_key: OpenAI API key.
@@ -67,7 +88,7 @@ def run_extraction(
         raise ValueError("openai_key must be a non-empty string.")
 
     model_cls = _import_class(model_class)
-    system_prompt = Path(system_prompt_path).read_text()
+    system_prompt = _read_text(system_prompt_path)
 
     timeout = (
         900 if service_tier == "flex" else 600
@@ -319,8 +340,9 @@ def write_batch_files(
 
     Args:
         prompts (list[dict]): Preformed prompts with the query (e.g., the output of `provider.aact.llm_extractor.build_prompts`)
-        system_prompt_path (str): Path to the system prompt file
-        model_class (str): Pydantic class with the output schema (e.g., 'clinical_mining.schemas.ClinicalReportExtractionSchema')
+        system_prompt_path (str): Filesystem path or ``package://`` URI for the
+            system prompt file
+        model_class (str): Pydantic class with the output schema (e.g., 'mira.schemas.ClinicalReportExtractionSchema')
         out_dir (Path): Directory to write batch files
         batch_size (int): Number of requests per batch file
         service_tier (str): Service tier for the OpenAI Batch API (e.g., 'flex', 'auto')
@@ -331,7 +353,7 @@ def write_batch_files(
         for i in range(0, len(items), chunk_size):
             yield i // chunk_size, items[i : i + chunk_size]
 
-    system_prompt = Path(system_prompt_path).read_text(encoding="utf-8")
+    system_prompt = _read_text(system_prompt_path)
     model_cls = _import_class(model_class)
     schema = _patch_schema(model_cls.model_json_schema(by_alias=True))
 

@@ -2,8 +2,8 @@
 
 import polars as pl
 
-from clinical_mining.dataset.clinical_report import ClinicalReport
-from clinical_mining.schemas import ClinicalProvider, ClinicalSource  # noqa: F401
+from mira.dataset.clinical_report import ClinicalReport
+from mira.schemas import ClinicalProvider, ClinicalSource  # noqa: F401
 
 
 def _report_frame(rows: list[dict]) -> pl.DataFrame:

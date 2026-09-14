@@ -24,7 +24,7 @@ def _ensure_spark_session(data_store: dict[str, Any]) -> None:
     if data_store.get("spark_session") is not None:
         return
 
-    from clinical_mining.utils.spark_helpers import spark_session
+    from mira.utils.spark_helpers import spark_session
 
     data_store["spark_session"] = spark_session()
 
