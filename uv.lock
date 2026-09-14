@@ -416,78 +416,6 @@ wheels = [
 ]
 
 [[package]]
-name = "opentargets-mira"
-version = "0.9.0"
-source = { editable = "." }
-dependencies = [
-    { name = "altair" },
-    { name = "biopython" },
-    { name = "connectorx" },
-    { name = "fastexcel" },
-    { name = "httpx" },
-    { name = "hydra-core" },
-    { name = "loguru" },
-    { name = "ontoma", extra = ["ner"] },
-    { name = "openai" },
-    { name = "pandas" },
-    { name = "pdfplumber" },
-    { name = "polars" },
-    { name = "polars-hash" },
-    { name = "pyarrow" },
-    { name = "pydantic" },
-    { name = "python-dotenv" },
-    { name = "sqlalchemy" },
-]
-
-[package.optional-dependencies]
-oracle = [
-    { name = "cx-oracle" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "ipykernel" },
-    { name = "pre-commit" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "ruff" },
-    { name = "ty" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "altair", specifier = ">=5.5.0" },
-    { name = "biopython", specifier = ">=1.87" },
-    { name = "connectorx", specifier = ">=0.4.3" },
-    { name = "cx-oracle", marker = "extra == 'oracle'", specifier = ">=8.3.0" },
-    { name = "fastexcel", specifier = ">=0.16.0" },
-    { name = "httpx", specifier = ">=0.28.0" },
-    { name = "hydra-core", specifier = ">=1.3.2" },
-    { name = "loguru", specifier = ">=0.7.3" },
-    { name = "ontoma", extras = ["ner"], specifier = ">=2.4.1" },
-    { name = "openai", specifier = ">=2.37.0" },
-    { name = "pandas", specifier = ">=2.3.3" },
-    { name = "pdfplumber", specifier = ">=0.11.8" },
-    { name = "polars", specifier = ">=1.34.0" },
-    { name = "polars-hash", specifier = ">=0.5.5" },
-    { name = "pyarrow", specifier = ">=22.0.0" },
-    { name = "pydantic", specifier = ">=2.11.7" },
-    { name = "python-dotenv", specifier = ">=1.0.0" },
-    { name = "sqlalchemy", specifier = ">=2.0.42" },
-]
-provides-extras = ["oracle"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "ipykernel", specifier = ">=6.29.5" },
-    { name = "pre-commit", specifier = ">=4.6.0" },
-    { name = "pytest", specifier = ">=8.0.0" },
-    { name = "pytest-asyncio", specifier = ">=0.24.0" },
-    { name = "ruff", specifier = ">=0.15.20" },
-    { name = "ty", specifier = ">=0.0.15" },
-]
-
-[[package]]
 name = "colorama"
 version = "0.4.6"
 source = { registry = "https://pypi.org/simple" }
@@ -1740,6 +1668,78 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/7d/9c/ba0c292b4032ede74c249ca314ad64eb1bb5a03a843f6e01facb02f80cd8/openai-3.3.1.tar.gz", hash = "sha256:6f22807de1a976c932cecda620e8172a8c3fdbaeed29c7f21564e0c2410edf56", size = 1282113, upload-time = "2026-08-19T16:31:35.006Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/6a/db/2b7a1b3de659bb82aef979116c74e809982b13e42c057759767552b5155f/openai-3.3.1-py3-none-any.whl", hash = "sha256:9652df7fdf8ee6f5bd58e0a12f2b1d414a18e0f06bb7a9a57c8643a5f5469bd3", size = 1690337, upload-time = "2026-08-19T16:31:32.812Z" },
+]
+
+[[package]]
+name = "opentargets-mira"
+version = "1.0.0"
+source = { editable = "." }
+dependencies = [
+    { name = "altair" },
+    { name = "biopython" },
+    { name = "connectorx" },
+    { name = "fastexcel" },
+    { name = "httpx" },
+    { name = "hydra-core" },
+    { name = "loguru" },
+    { name = "ontoma", extra = ["ner"] },
+    { name = "openai" },
+    { name = "pandas" },
+    { name = "pdfplumber" },
+    { name = "polars" },
+    { name = "polars-hash" },
+    { name = "pyarrow" },
+    { name = "pydantic" },
+    { name = "python-dotenv" },
+    { name = "sqlalchemy" },
+]
+
+[package.optional-dependencies]
+oracle = [
+    { name = "cx-oracle" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "ipykernel" },
+    { name = "pre-commit" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "ruff" },
+    { name = "ty" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "altair", specifier = ">=5.5.0" },
+    { name = "biopython", specifier = ">=1.87" },
+    { name = "connectorx", specifier = ">=0.4.3" },
+    { name = "cx-oracle", marker = "extra == 'oracle'", specifier = ">=8.3.0" },
+    { name = "fastexcel", specifier = ">=0.16.0" },
+    { name = "httpx", specifier = ">=0.28.0" },
+    { name = "hydra-core", specifier = ">=1.3.2" },
+    { name = "loguru", specifier = ">=0.7.3" },
+    { name = "ontoma", extras = ["ner"], specifier = ">=2.4.1" },
+    { name = "openai", specifier = ">=2.37.0" },
+    { name = "pandas", specifier = ">=2.3.3" },
+    { name = "pdfplumber", specifier = ">=0.11.8" },
+    { name = "polars", specifier = ">=1.34.0" },
+    { name = "polars-hash", specifier = ">=0.5.5" },
+    { name = "pyarrow", specifier = ">=22.0.0" },
+    { name = "pydantic", specifier = ">=2.11.7" },
+    { name = "python-dotenv", specifier = ">=1.0.0" },
+    { name = "sqlalchemy", specifier = ">=2.0.42" },
+]
+provides-extras = ["oracle"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "ipykernel", specifier = ">=6.29.5" },
+    { name = "pre-commit", specifier = ">=4.6.0" },
+    { name = "pytest", specifier = ">=8.0.0" },
+    { name = "pytest-asyncio", specifier = ">=0.24.0" },
+    { name = "ruff", specifier = ">=0.15.20" },
+    { name = "ty", specifier = ">=0.0.15" },
 ]
 
 [[package]]
