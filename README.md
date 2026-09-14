@@ -5,8 +5,11 @@
 <h1 align="center">MIRA</h1>
 
 <p align="center">
-  <strong>Multi-source Indication &amp; Report Analytics</strong><br>
-  Clinical trial data mining and integration tools for drug discovery.
+  <strong>Multi-source Indication &amp; Report Analytics</strong>
+</p>
+
+<p align="center">
+  Harmonising clinical trials, regulatory approvals, drug indications, and safety evidence for drug discovery.
 </p>
 
 <p align="center">
