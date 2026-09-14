@@ -1,6 +1,20 @@
-# MIRA
+<p align="center">
+  <img src="https://raw.githubusercontent.com/opentargets/mira/main/assets/brand/mira-logo-1200.png" alt="MIRA logo" width="640">
+</p>
 
-MIRA provides clinical trial data mining and integration tools for drug discovery.
+<h1 align="center">MIRA</h1>
+
+<p align="center">
+  <strong>Multi-source Indication &amp; Report Analytics</strong><br>
+  Clinical trial data mining and integration tools for drug discovery.
+</p>
+
+<p align="center">
+  <a href="https://pypi.org/project/opentargets-mira/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/opentargets-mira?color=173B59"></a>
+  <img alt="Supported Python versions" src="https://img.shields.io/badge/python-3.11%20%7C%203.12-3489CA?logo=python&amp;logoColor=white">
+  <a href="https://github.com/opentargets/mira/actions/workflows/ci.yaml"><img alt="CI status" src="https://github.com/opentargets/mira/actions/workflows/ci.yaml/badge.svg"></a>
+  <a href="https://github.com/opentargets/mira/blob/main/LICENSE"><img alt="Apache 2.0 license" src="https://img.shields.io/github/license/opentargets/mira?color=AED0EA"></a>
+</p>
 
 ## Motivation
 
@@ -10,13 +24,9 @@ Mining clinical trials is essential for accelerating drug discovery and biomedic
 - Identification of drug repurposing opportunities
 - Analysis of intervention efficacy and safety
 
-## Project Overview
-
-This project provides tools to fetch, process, and annotate clinical trial data directly from the AACT (Aggregate Analysis of ClinicalTrials.gov) database. It is designed to facilitate large-scale mining and integration of clinical trials for drug discovery applications.
-
 ### Key Features
 
-- **Direct Connection to AACT:** Uses a robust connector to securely access the AACT PostgreSQL database.
+- **Direct Connection to clinical databases like AACT or ChEMBL:** Uses a robust connector to securely access PostgreSQL databases.
 - **Automated Table Loading:** Loads and filters relevant tables (studies, interventions, conditions, etc.) using Polars for scalable processing.
 - **Drug and Disease Mapping:** Integrates external drug and disease vocabularies to annotate interventions and indications in trials.
 - **LLM Extraction:** Uses LLMs to extract structured drug–disease evidence from clinical trial records.
