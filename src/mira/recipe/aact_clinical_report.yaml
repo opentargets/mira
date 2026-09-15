@@ -1,0 +1,54 @@
+# @package _global_
+# =================================================
+# RECIPE: Small AACT Clinical Report example
+# =================================================
+# Loads one ClinicalTrials.gov study from a local AACT PostgreSQL database,
+# creates Clinical Reports, and derives unmapped Clinical Indications.
+#
+# Usage:
+#   uv run mira +recipe=aact_clinical_report
+#   MIRA_AACT_STUDY_ID=NCT05188521 uv run mira +recipe=aact_clinical_report
+# =================================================
+
+inputs:
+  studies:
+    format: db_table
+    db: aact
+    select_cols:
+      - nct_id
+      - phase
+      - study_type
+      - official_title
+    where_clause: "nct_id = '${oc.env:MIRA_AACT_STUDY_ID,NCT05188521}'"
+
+  interventions:
+    format: db_table
+    db: aact
+    select_cols:
+      - nct_id
+      - intervention_type
+      - name
+    where_clause: "nct_id = '${oc.env:MIRA_AACT_STUDY_ID,NCT05188521}'"
+
+  conditions:
+    format: db_table
+    db: aact
+    select_cols:
+      - nct_id
+      - downcase_name
+    where_clause: "nct_id = '${oc.env:MIRA_AACT_STUDY_ID,NCT05188521}'"
+
+workflow:
+  transform:
+    generate:
+      output_clinical_report:
+        function: mira.provider.aact.extract_clinical_report
+        parameters:
+          studies: $studies
+          interventions: $interventions
+          conditions: $conditions
+
+      output_clinical_indication:
+        function: mira.dataset.ClinicalIndication.from_report
+        parameters:
+          report: $output_clinical_report
