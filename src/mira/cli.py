@@ -40,12 +40,20 @@ def _run_transform(workflow_cfg: DictConfig, cfg: DictConfig) -> dict[str, Any]:
                     f"Input '{name}' references db '{db_name}', but it is not defined under db_properties"
                 )
             data_store[name] = load_db_table(
-                table_name=name,
+                table_name=source.get("table_name", name),
                 db_url=db_urls[db_name],
-                select_cols=list(source.select_cols),
-                db_schema=cfg.db_properties[db_name].schema,
+                select_cols=(
+                    list(source.select_cols)
+                    if not isinstance(source.select_cols, str)
+                    else source.select_cols
+                ),
+                db_schema=source.get("schema", cfg.db_properties[db_name].schema),
+                limit=source.get("limit"),
+                where_clause=source.get("where_clause"),
             )
-        elif "spark" in name:
+        elif source.get("engine") == "spark" or (
+            source.get("engine") is None and "spark" in name
+        ):
             if data_store.get("spark_session") is None:
                 data_store["spark_session"] = spark_session()
             data_store[name] = data_store["spark_session"].read.load(
@@ -71,7 +79,11 @@ def _run_transform(workflow_cfg: DictConfig, cfg: DictConfig) -> dict[str, Any]:
 
     # Write outputs: anything prefixed output_
 
-    outputs = {k: v for k, v in data_store.items() if k.startswith("output_")}
+    outputs = {
+        k: v
+        for k, v in data_store.items()
+        if k.startswith("output_") and k != "output_dir"
+    }
     for k, v in outputs.items():
         if v is None:
             logger.info(f"Step '{k}' returned None (inspect mode), skipping output")

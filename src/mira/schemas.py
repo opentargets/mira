@@ -125,57 +125,90 @@ class ClinicalReportType(str, Enum):
 
 class AssociatedDrug(BaseModel):
     drugFromSource: str | None = Field(
-        default=None, description="The drug label used at the source."
+        default=None, description="The drug label as reported by the evidence source."
     )
-    drugId: str | None = Field(default=None, description="The assigned drug ID.")
+    drugId: str | None = Field(
+        default=None,
+        description="The mapped ChEMBL identifier, when mapping is available.",
+    )
 
 
 class AssociatedDisease(BaseModel):
     diseaseFromSource: str | None = Field(
-        description="The disease label used at the source."
+        default=None,
+        description="The disease or safety-outcome label as reported by the evidence source.",
     )
-    diseaseId: str | None = Field(description="The assigned disease ID.")
+    diseaseId: str | None = Field(
+        default=None,
+        description="The mapped EFO identifier, when mapping is available.",
+    )
 
 
 class ClinicalReportSchema(BaseModel):
-    """Represents a clinical record and its metadata."""
+    """A traceable clinical-evidence record linking drugs to diseases or safety outcomes."""
 
     model_config = ConfigDict(extra="allow")
 
     id: str = Field(
-        ..., description="The identifier for the clinical reference, e.g. NCT04012606."
+        ...,
+        description=(
+            "Identifier of the underlying evidence record, as supplied by or derived "
+            "from the source; for example, a ClinicalTrials.gov NCT identifier."
+        ),
     )
     clinicalStage: ClinicalStageCategory = Field(
-        description="The clinical development status of the clinical reference after harmonisation .",
+        description=(
+            "Clinical-development or regulatory status after harmonising the "
+            "source-specific value to a shared category."
+        ),
     )
     phaseFromSource: str | None = Field(
-        default=None, description="The phase of the report at the source."
+        default=None,
+        description=(
+            "Development, regulatory, or safety status reported by the source before "
+            "harmonisation."
+        ),
     )
     origin: ClinicalReportOrigin = Field(
-        description="The type from which the report originates."
+        description=(
+            "Kind of record from which the evidence originates: a clinical trial, "
+            "drug label, regulatory-agency record, or curated resource."
+        )
     )
     type: ClinicalReportType = Field(
-        description="The type of evidence the clinical report describes."
+        description=(
+            "Relationship described by the report: drug indication or drug safety."
+        )
     )
-    year: int | None = Field(default=None, description="The year of the report.")
+    year: int | None = Field(
+        default=None,
+        description="Source-specific year associated with the evidence record.",
+    )
     countries: list[str] | None = Field(
-        default=None, description="The countries where the report was conducted."
+        default=None,
+        description=(
+            "Countries or regulatory jurisdictions associated with the evidence record."
+        ),
     )
     url: str | None = Field(
-        default=None, description="The URL of the report, e.g. in Dailymed."
+        default=None, description="URL of the underlying evidence record."
     )
-    source: ClinicalSource = Field(description="The report primary source.")
+    source: ClinicalSource = Field(
+        description="Original source from which the clinical evidence originates."
+    )
     provider: ClinicalProvider = Field(
-        description="The resource or oganisation that distributes data fetched from a primary source."
+        description="Resource from which Mira obtained the evidence record."
     )
     diseases: list[AssociatedDisease] | None = Field(
-        default=None, description="The diseases associated with the report."
+        default=None,
+        description="Diseases associated with the drugs in an indication report.",
     )
     drugs: list[AssociatedDrug] = Field(
-        description="The drugs associated with the study."
+        description="Drugs associated with the evidence record."
     )
     sideEffects: list[AssociatedDisease] | None = Field(
-        default=None, description="The side effects associated with the report."
+        default=None,
+        description="Safety outcomes associated with the drugs in a safety report.",
     )
     # + optional trial metadata fields with the `trial` prefix. E.g. trialDescription
 
@@ -185,13 +218,21 @@ class ClinicalIndicationSchema(BaseModel):
 
     model_config = ConfigDict(extra="allow")
 
-    # Primary identifiers (derived from IDs)
-    id: str = Field(description="Hashed identifier based on drug and disease names")
+    # Primary identifiers (derived from IDs or source labels)
+    id: str = Field(
+        description="Hashed identifier derived from the drug and disease grouping keys."
+    )
     drugName: str = Field(
-        description="Drug name (ChEMBL ID if mapping is available, otherwise label from clinical source)"
+        description=(
+            "Drug grouping key: the ChEMBL identifier when mapped, otherwise the "
+            "label from the evidence source."
+        )
     )
     diseaseName: str = Field(
-        description="Disease name (EFO ID if mapping is available, otherwise label from clinical source)"
+        description=(
+            "Disease grouping key: the EFO identifier when mapped, otherwise the "
+            "label from the evidence source."
+        )
     )
 
     drugId: str | None = Field(
@@ -202,10 +243,16 @@ class ClinicalIndicationSchema(BaseModel):
         default=None, description="The EFO ID corresponding to the disease."
     )
     maxClinicalStage: ClinicalStageCategory = Field(
-        description="The maximum clinical development status (MCDS) of the drug/indication relationship.",
+        description=(
+            "Most advanced harmonised clinical stage among the reports supporting "
+            "the drug-disease relationship."
+        ),
     )
     mappingStatus: MappingStatus = Field(
-        description="The mapping status of the drug/indication relationship.",
+        description=(
+            "Whether identifiers are available for both entities, only the drug, "
+            "only the disease, or neither entity."
+        ),
     )
     clinicalReportIds: list[str] = Field(
         ...,
