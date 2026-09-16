@@ -44,9 +44,6 @@ flowchart TD
     DRUGID --> OUTPUT
     DRUGUNMAPPED --> OUTPUT
 
-    style START fill:#4b4375,stroke:#b9aeef,color:#f8f6ff
-    style OUTPUT fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
-    style NER fill:#714329,stroke:#ffb37c,color:#fff7f0
 ```
 
 The curation and label-mapping steps are independent for drugs and diseases. A report can therefore finish with both identifiers, only one identifier, or neither identifier.
@@ -111,11 +108,6 @@ flowchart TD
     RIB --> RIBMAP["CHEMBL1643"]
     AID ~~~ P
 
-    style ANER fill:#714329,stroke:#ffb37c,color:#fff7f0
-    style PNER fill:#714329,stroke:#ffb37c,color:#fff7f0
-    style AID fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
-    style PEGMAP fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
-    style RIBMAP fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
 ```
 
 > [!NOTE]

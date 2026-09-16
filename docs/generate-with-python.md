@@ -22,7 +22,7 @@ Mira includes a PostgreSQL connector that reads a database table directly into a
 
 Build the connection URL using environment variables for credentials:
 
-```python
+```python title="Connect to AACT"
 import os
 
 import polars as pl
@@ -42,7 +42,7 @@ When the local database does not require authentication, the environment variabl
 
 Now load the three tables needed for a small AACT report example:
 
-```python
+```python title="Load one AACT study" hl_lines="1 8 16 24"
 trial_filter = "nct_id = 'NCT05188521'"
 
 studies = load_db_table(
@@ -81,7 +81,7 @@ assert isinstance(studies, pl.DataFrame)
 
 Each provider exposes a function that transforms its source data into a `ClinicalReport`. Pass the three AACT DataFrames to its provider function:
 
-```python
+```python title="Create an AACT Clinical Report" hl_lines="4-8"
 from mira.provider.aact import extract_clinical_report
 
 
@@ -174,7 +174,7 @@ all_reports = union_dfs(
 
 The default workflow maps drug and disease labels after all provider reports have been combined. It uses the Open Targets disease and molecule indices, with optional ChEMBL clinical-trial curation and drug named-entity recognition:
 
-```python
+```python title="Map drugs and diseases" hl_lines="6-9 12"
 from mira.dataset import ClinicalReport
 
 
@@ -205,7 +205,7 @@ clinical_indications = ClinicalIndication.from_report(mapped_reports.df)
 
 The resulting object includes fully mapped, partially mapped, and unmapped relationships. Filter to `FULLY_MAPPED` to reproduce the subset displayed by Open Targets:
 
-```python
+```python title="Keep the Platform-visible subset" hl_lines="2"
 platform_indications = clinical_indications.df.filter(
     pl.col("mappingStatus") == "FULLY_MAPPED"
 )
@@ -217,7 +217,7 @@ Read [Clinical Indication](clinical-indication.md) for the aggregation rules and
 
 When using the Python API, the caller chooses where and when to write the results:
 
-```python
+```python title="Write both datasets"
 from pathlib import Path
 
 

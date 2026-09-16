@@ -38,10 +38,6 @@ flowchart TD
     REPLACE --> SELECT
     SELECT --> REPORT["One Clinical Report per NCT ID<br/>with nested drugs and diseases"]
 
-    style S fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
-    style I fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
-    style C fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
-    style REPORT fill:#4b4375,stroke:#b9aeef,color:#f8f6ff
 ```
 
 ## Required tables
