@@ -81,7 +81,7 @@ def extract_chembl_ct_curation(
             host=db_host,
             port=db_port,
             service=db_service,
-            db_schema="CHEMBL_36",
+            db_schema="CHEMBL_37",
             limit=None,
             init_client_lib_dir=oracle_client_path,
         )
