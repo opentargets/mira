@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/opentargets/mira/main/assets/brand/mira-logo-1200.png" alt="MIRA logo" width="640">
+  <img src="https://raw.githubusercontent.com/opentargets/mira/main/docs/assets/brand/mira-logo-1200.png" alt="MIRA logo" width="640">
 </p>
 
 <h1 align="center">MIRA</h1>
@@ -27,6 +27,12 @@ Mira turns records from clinical-data providers into traceable Clinical Reports 
 
 ```bash
 pip install opentargets-mira
+```
+
+For the optional legacy ChEMBL Oracle curation utilities:
+
+```bash
+pip install "opentargets-mira[oracle]"
 ```
 
 See the [documentation index](docs/index.md) for data models, providers, Python usage, and CLI configuration.

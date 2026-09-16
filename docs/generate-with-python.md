@@ -125,16 +125,27 @@ clinical_indications.df.select(
 )
 ```
 
-For the small example, the result is:
+For the small example, the result contains two rows because AACT supplies two
+dose-specific baricitinib source labels. Both rows refer to cutaneous lichen
+planus and remain unmapped until entity mapping is run:
 
 ```python
-{
-    "drugName": "baricitinib",
-    "diseaseName": "cutaneous lichen planus",
-    "maxClinicalStage": "PHASE_2",
-    "mappingStatus": "UNMAPPED",
-    "clinicalReportIds": ["nct05188521"],
-}
+[
+    {
+        "drugName": "<first dose-specific baricitinib label>",
+        "diseaseName": "cutaneous lichen planus",
+        "maxClinicalStage": "PHASE_2",
+        "mappingStatus": "UNMAPPED",
+        "clinicalReportIds": ["nct05188521"],
+    },
+    {
+        "drugName": "<second dose-specific baricitinib label>",
+        "diseaseName": "cutaneous lichen planus",
+        "maxClinicalStage": "PHASE_2",
+        "mappingStatus": "UNMAPPED",
+        "clinicalReportIds": ["nct05188521"],
+    },
+]
 ```
 
 > [!IMPORTANT]

@@ -15,6 +15,22 @@ The documentation is being developed around three questions:
 > [!TIP]
 > Start with [How Mira works](concepts.md) for the complete path from provider data to Clinical Reports, mapped entities, and Clinical Indications.
 
+## Installation
+
+Install the core package from PyPI:
+
+```bash
+pip install opentargets-mira
+```
+
+The legacy private ChEMBL Oracle curation utilities require the optional Oracle extra:
+
+```bash
+pip install "opentargets-mira[oracle]"
+```
+
+The Oracle curation process is not required for the public default workflow and is intended for deprecation.
+
 ## :lucide-database: Data documentation
 
 <div class="grid cards" markdown>
