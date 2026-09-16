@@ -58,7 +58,7 @@ The recipe queries each table with the study filter, rather than loading the com
 
 Mira writes steps whose names begin with `output_` beneath a dated directory:
 
-```text
+```text title="Default output layout"
 data/
 └── outputs/
     └── YYYY-MM-DD/
@@ -172,7 +172,7 @@ parameters:
 
 A recipe declares `inputs` and a `workflow`:
 
-```yaml
+```yaml title="Minimal recipe structure" hl_lines="14 16-18"
 # @package _global_
 
 inputs:
@@ -219,7 +219,7 @@ For a database input:
 
 Use an explicit engine for Spark data:
 
-```yaml
+```yaml title="Load a Spark DataFrame" hl_lines="3"
 disease_index:
   format: parquet
   engine: spark
@@ -285,7 +285,7 @@ All local dataset defaults live beneath `datasets.data_root`. Setting `MIRA_DATA
 
 Keep deployment-specific recipes outside the installed package. Create a configuration directory containing a `recipe` subdirectory:
 
-```text
+```text title="User-owned configuration layout"
 mira-config/
 └── recipe/
     └── my_pipeline.yaml
@@ -305,7 +305,7 @@ The user-owned recipe still inherits Mira's packaged `config.yaml`. This approac
 
 The full recipe is [`clinical_report_generation.yaml`](https://github.com/opentargets/mira/blob/main/src/mira/recipe/clinical_report_generation.yaml). It expects both databases and the following layout beneath `MIRA_DATA_DIR`:
 
-```text
+```text title="Full workflow input layout"
 <MIRA_DATA_DIR>/
 ├── inputs/
 │   ├── disease/

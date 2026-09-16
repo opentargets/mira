@@ -43,12 +43,6 @@ flowchart TD
         APP
     end
 
-    style CT fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
-    style DL fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
-    style CI fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
-    style DW fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
-    style CLIN fill:#4b4375,stroke:#b9aeef,color:#f8f6ff
-    style APP fill:#714329,stroke:#ffb37c,color:#fff7f0
     style reports fill: transparent, stroke: transparent
     style indication fill: transparent, stroke: transparent
     style maxstage fill: transparent, stroke: transparent

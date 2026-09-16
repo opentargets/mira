@@ -17,10 +17,41 @@ The documentation is being developed around three questions:
 
 ## :lucide-database: Data documentation
 
-- [How Mira works](concepts.md)
-- [Clinical Report](clinical-report.md)
-- [Clinical Indication](clinical-indication.md)
-- [Entity mapping](entity-mapping.md)
+<div class="grid cards" markdown>
+
+-   :lucide-book-open:{ .lg .middle } __How Mira works__
+
+    ---
+
+    Follow the complete path from provider data to mapped Clinical Reports and Clinical Indications.
+
+    [:lucide-arrow-right: Read the overview](concepts.md)
+
+-   :lucide-file-text:{ .lg .middle } __Clinical Report__
+
+    ---
+
+    Understand one traceable evidence record, its clinical stage, source, provider, and core fields.
+
+    [:lucide-arrow-right: Explore Clinical Reports](clinical-report.md)
+
+-   :lucide-layers:{ .lg .middle } __Clinical Indication__
+
+    ---
+
+    See how Mira groups reports into drug–disease relationships and derives their maximum clinical stage.
+
+    [:lucide-arrow-right: Explore Clinical Indications](clinical-indication.md)
+
+-   :lucide-link:{ .lg .middle } __Entity mapping__
+
+    ---
+
+    Learn how source labels become ChEMBL and EFO identifiers, including the NER fallback paths.
+
+    [:lucide-arrow-right: Follow entity mapping](entity-mapping.md)
+
+</div>
 
 ## :lucide-network: Providers
 
@@ -34,8 +65,30 @@ Each provider page explains what that source contributes and the selection rules
 
 ## :lucide-terminal: Using Mira
 
-- [Generate data with Python](generate-with-python.md)
-- [CLI and YAML configuration](cli-and-configuration.md)
-- [Data inputs](data-inputs.md)
+<div class="grid cards" markdown>
 
-Start with the Python guide to see the data flow directly. Use the CLI guide for repeatable recipe-driven runs and configuration changes.
+-   :lucide-braces:{ .lg .middle } __Generate with Python__
+
+    ---
+
+    Call provider, mapping, and aggregation functions directly to make the data flow visible.
+
+    [:lucide-arrow-right: Use the Python API](generate-with-python.md)
+
+-   :lucide-terminal:{ .lg .middle } __Run recipes__
+
+    ---
+
+    Use the CLI and YAML recipes for repeatable runs and deployment-specific configuration.
+
+    [:lucide-arrow-right: Configure the CLI](cli-and-configuration.md)
+
+-   :lucide-database:{ .lg .middle } __Prepare the inputs__
+
+    ---
+
+    Find the upstream releases, database tables, file formats, and expected local layout.
+
+    [:lucide-arrow-right: Review data inputs](data-inputs.md)
+
+</div>

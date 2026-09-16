@@ -4,6 +4,11 @@
   --md-primary-fg-color--dark: #102b42;
   --md-accent-fg-color: #3489ca;
   --md-accent-fg-color--transparent: rgba(52, 137, 202, 0.12);
+  --md-mermaid-node-bg-color: #e6f1f9;
+  --md-mermaid-node-fg-color: #173b59;
+  --md-mermaid-edge-color: #52697a;
+  --md-mermaid-label-bg-color: #ffffff;
+  --md-mermaid-label-fg-color: #173b59;
 }
 
 [data-md-color-scheme="slate"] {
