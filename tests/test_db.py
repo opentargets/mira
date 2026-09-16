@@ -1,6 +1,6 @@
 import pytest
 
-from clinical_mining.utils.db import _build_select_query, construct_db_uri
+from mira.utils.db import _build_select_query, construct_db_uri
 
 
 def test_construct_db_uri_quotes_credentials() -> None:
