@@ -26,13 +26,13 @@ flowchart TD
     MAPPING --> MAPPED
     MAPPED --> INDICATIONS
 
-    style SOURCES fill:#f4f6f8,stroke:#637381,color:#263238
-    style EXTRACTIONS fill:#f4f6f8,stroke:#637381,color:#263238
-    style ADAPTERS fill:#e8f2fb,stroke:#3489ca,color:#173b59
-    style REPORTS fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style MAPPING fill:#fce8dc,stroke:#c97a50,color:#8b3a10
-    style MAPPED fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style INDICATIONS fill:#dcd8f5,stroke:#7b6fc4,color:#3b2e8a
+    style SOURCES fill:#334155,stroke:#94a3b8,color:#f8fafc
+    style EXTRACTIONS fill:#334155,stroke:#94a3b8,color:#f8fafc
+    style ADAPTERS fill:#1e4b6b,stroke:#78b9e7,color:#f3f8fc
+    style REPORTS fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style MAPPING fill:#714329,stroke:#ffb37c,color:#fff7f0
+    style MAPPED fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style INDICATIONS fill:#4b4375,stroke:#b9aeef,color:#f8f6ff
 ```
 
 This flow separates source-specific work from shared domain rules. Provider adapters understand the shape of AACT, ChEMBL, TTD, EMA, and PMDA data. The report, mapping, and indication stages apply the same concepts after those differences have been harmonised.

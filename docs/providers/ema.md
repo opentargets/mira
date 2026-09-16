@@ -38,5 +38,5 @@ EMA supplies descriptive drug and disease labels rather than the ChEMBL and EFO 
 
 ## Implementation reference
 
-- [EMA provider](../../src/mira/provider/ema.py)
-- [Default workflow](../../src/mira/recipe/clinical_report_generation.yaml)
+- [EMA provider](https://github.com/opentargets/mira/blob/main/src/mira/provider/ema.py)
+- [Default workflow](https://github.com/opentargets/mira/blob/main/src/mira/recipe/clinical_report_generation.yaml)

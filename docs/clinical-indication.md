@@ -43,12 +43,12 @@ flowchart TD
         APP
     end
 
-    style CT fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style DL fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style CI fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style DW fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style CLIN fill:#dcd8f5,stroke:#7b6fc4,color:#3b2e8a
-    style APP fill:#fce8dc,stroke:#c97a50,color:#8b3a10
+    style CT fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style DL fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style CI fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style DW fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style CLIN fill:#4b4375,stroke:#b9aeef,color:#f8f6ff
+    style APP fill:#714329,stroke:#ffb37c,color:#fff7f0
     style reports fill: transparent, stroke: transparent
     style indication fill: transparent, stroke: transparent
     style maxstage fill: transparent, stroke: transparent
@@ -84,7 +84,7 @@ The maximum stage summarises how far the drug–disease relationship has progres
 
 ## Core fields
 
-The core schema is defined in [`schemas.py`](../src/mira/schemas.py). See the [Open Targets Clinical Indication schema](https://platform.opentargets.org/downloads/clinical_indication/schema) for the full downloadable dataset contract.
+The core schema is defined in [`schemas.py`](https://github.com/opentargets/mira/blob/main/src/mira/schemas.py). See the [Open Targets Clinical Indication schema](https://platform.opentargets.org/downloads/clinical_indication/schema) for the full downloadable dataset contract.
 
 | Field | Meaning |
 | --- | --- |

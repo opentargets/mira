@@ -32,13 +32,13 @@ Mira currently integrates five providers:
 
 | Provider | What it provides to Mira | Evidence sources represented | Implementation |
 | --- | --- | --- | --- |
-| AACT | Structured ClinicalTrials.gov study records | ClinicalTrials.gov | [AACT guide](providers/aact.md) and [implementation](../src/mira/provider/aact/) |
+| AACT | Structured ClinicalTrials.gov study records | ClinicalTrials.gov | [AACT guide](providers/aact.md) and [implementation](https://github.com/opentargets/mira/tree/main/src/mira/provider/aact) |
 | ChEMBL | Curated drug indications and drug warnings | ChEMBL records and references from sources including FDA, EMA, ATC, DailyMed, INN, USAN, and ClinicalTrials.gov | [ChEMBL guide](providers/chembl.md) |
 | EMA | Human medicine records published by the European Medicines Agency | EMA Human Drugs | [EMA guide](providers/ema.md) |
 | PMDA | Public Japanese approval records | PMDA | [PMDA guide](providers/pmda.md) |
 | TTD | Curated drug–disease records from the Therapeutic Target Database | TTD | [TTD guide](providers/ttd.md) |
 
-The provider implementations live in the [`mira.provider` package](../src/mira/provider/). Each provider guide explains its contribution and selection rules; the [data-input inventory](data-inputs.md) documents acquisition and input formats.
+The provider implementations live in the [`mira.provider` package](https://github.com/opentargets/mira/tree/main/src/mira/provider). Each provider guide explains its contribution and selection rules; the [data-input inventory](data-inputs.md) documents acquisition and input formats.
 
 ## Drug and disease mapping
 
@@ -90,11 +90,11 @@ This makes clinical status comparable across different kinds of evidence and giv
 | `PRECLINICAL` | Evidence from preclinical development or an equivalent source-reported status. |
 | `UNKNOWN` | The source value is missing, ambiguous, or cannot be mapped to another category. |
 
-See the [Open Targets clinical-stage documentation](https://platform-docs.opentargets.org/drug/clinical-report#clinical-stage-categories) for the Platform-level interpretation. The mapping from source values to these categories is implemented in [`clinical_report.py`](../src/mira/dataset/clinical_report.py).
+See the [Open Targets clinical-stage documentation](https://platform-docs.opentargets.org/drug/clinical-report#clinical-stage-categories) for the Platform-level interpretation. The mapping from source values to these categories is implemented in [`clinical_report.py`](https://github.com/opentargets/mira/blob/main/src/mira/dataset/clinical_report.py).
 
 ## Core fields
 
-The core schema is defined in [`schemas.py`](../src/mira/schemas.py). Fields may be null where a source does not provide the information or where the field does not apply to that kind of report.
+The core schema is defined in [`schemas.py`](https://github.com/opentargets/mira/blob/main/src/mira/schemas.py). Fields may be null where a source does not provide the information or where the field does not apply to that kind of report.
 
 | Field | Meaning |
 | --- | --- |

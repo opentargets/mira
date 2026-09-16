@@ -37,5 +37,5 @@ TTD's clinical-stage value becomes `phaseFromSource` and is harmonised through M
 
 ## Implementation reference
 
-- [TTD provider](../../src/mira/provider/ttd.py)
-- [Default workflow](../../src/mira/recipe/clinical_report_generation.yaml)
+- [TTD provider](https://github.com/opentargets/mira/blob/main/src/mira/provider/ttd.py)
+- [Default workflow](https://github.com/opentargets/mira/blob/main/src/mira/recipe/clinical_report_generation.yaml)

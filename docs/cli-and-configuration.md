@@ -109,8 +109,8 @@ Relative paths are resolved from the directory in which the command starts.
 
 Four layers determine a run, from general defaults to the most specific value:
 
-1. [`config.yaml`](../src/mira/config.yaml) supplies shared database and path defaults.
-2. A named file under [`recipe/`](../src/mira/recipe/) adds inputs and workflow steps.
+1. [`config.yaml`](https://github.com/opentargets/mira/blob/main/src/mira/config.yaml) supplies shared database and path defaults.
+2. A named file under [`recipe/`](https://github.com/opentargets/mira/tree/main/src/mira/recipe) adds inputs and workflow steps.
 3. Environment interpolation supplies deployment-specific values such as credentials and the data root.
 4. Command-line overrides replace individual values for one run.
 
@@ -303,7 +303,7 @@ The user-owned recipe still inherits Mira's packaged `config.yaml`. This approac
 
 ## Run the complete Open Targets workflow
 
-The full recipe is [`clinical_report_generation.yaml`](../src/mira/recipe/clinical_report_generation.yaml). It expects both databases and the following layout beneath `MIRA_DATA_DIR`:
+The full recipe is [`clinical_report_generation.yaml`](https://github.com/opentargets/mira/blob/main/src/mira/recipe/clinical_report_generation.yaml). It expects both databases and the following layout beneath `MIRA_DATA_DIR`:
 
 ```text
 <MIRA_DATA_DIR>/
@@ -373,7 +373,7 @@ Outputs are selected by step name. In a copied recipe, rename a step such as `al
 
 ## Relevant implementation
 
-- [`mira.cli`](../src/mira/cli.py) loads inputs, runs sections, and writes outputs.
-- [`mira.utils.pipeline`](../src/mira/utils/pipeline.py) imports callables and resolves runtime references.
-- [`mira.utils.db`](../src/mira/utils/db.py) constructs database queries and returns Polars DataFrames.
-- [Packaged recipes](../src/mira/recipe/) define the supported workflows.
+- [`mira.cli`](https://github.com/opentargets/mira/blob/main/src/mira/cli.py) loads inputs, runs sections, and writes outputs.
+- [`mira.utils.pipeline`](https://github.com/opentargets/mira/blob/main/src/mira/utils/pipeline.py) imports callables and resolves runtime references.
+- [`mira.utils.db`](https://github.com/opentargets/mira/blob/main/src/mira/utils/db.py) constructs database queries and returns Polars DataFrames.
+- [Packaged recipes](https://github.com/opentargets/mira/tree/main/src/mira/recipe) define the supported workflows.

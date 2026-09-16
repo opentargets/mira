@@ -143,7 +143,7 @@ Save the export as:
 <data_root>/inputs/chembl_mapping.parquet
 ```
 
-The legacy exporter is [`extract_chembl_ct_curation`](../src/mira/provider/chembl/curation.py). The full recipe currently expects its Parquet output. Public and new workflows should omit it with the override documented in [Run without ChEMBL clinical-trial curation](cli-and-configuration.md#run-without-chembl-clinical-trial-curation).
+The legacy exporter is [`extract_chembl_ct_curation`](https://github.com/opentargets/mira/blob/main/src/mira/provider/chembl/curation.py). The full recipe currently expects its Parquet output. Public and new workflows should omit it with the override documented in [Run without ChEMBL clinical-trial curation](cli-and-configuration.md#run-without-chembl-clinical-trial-curation).
 
 ## AACT
 

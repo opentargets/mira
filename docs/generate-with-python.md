@@ -235,13 +235,13 @@ clinical_indications.df.write_parquet(
 
 ## Where provider functions live
 
-Provider implementations are grouped under the [`mira.provider` package](../src/mira/provider/):
+Provider implementations are grouped under the [`mira.provider` package](https://github.com/opentargets/mira/tree/main/src/mira/provider):
 
-- [AACT](../src/mira/provider/aact/)
-- [ChEMBL indications](../src/mira/provider/chembl/indications.py)
-- [ChEMBL drug warnings](../src/mira/provider/chembl/drug_warnings.py)
-- [TTD](../src/mira/provider/ttd.py)
-- [EMA](../src/mira/provider/ema.py)
-- [PMDA](../src/mira/provider/pmda.py)
+- [AACT](https://github.com/opentargets/mira/tree/main/src/mira/provider/aact)
+- [ChEMBL indications](https://github.com/opentargets/mira/blob/main/src/mira/provider/chembl/indications.py)
+- [ChEMBL drug warnings](https://github.com/opentargets/mira/blob/main/src/mira/provider/chembl/drug_warnings.py)
+- [TTD](https://github.com/opentargets/mira/blob/main/src/mira/provider/ttd.py)
+- [EMA](https://github.com/opentargets/mira/blob/main/src/mira/provider/ema.py)
+- [PMDA](https://github.com/opentargets/mira/blob/main/src/mira/provider/pmda.py)
 
 Each source guide will document the required inputs before showing its provider call in full.
