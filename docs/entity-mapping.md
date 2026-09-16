@@ -44,9 +44,9 @@ flowchart TD
     DRUGID --> OUTPUT
     DRUGUNMAPPED --> OUTPUT
 
-    style START fill:#dcd8f5,stroke:#7b6fc4,color:#3b2e8a
-    style OUTPUT fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style NER fill:#fce8dc,stroke:#c97a50,color:#8b3a10
+    style START fill:#4b4375,stroke:#b9aeef,color:#f8f6ff
+    style OUTPUT fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style NER fill:#714329,stroke:#ffb37c,color:#fff7f0
 ```
 
 The curation and label-mapping steps are independent for drugs and diseases. A report can therefore finish with both identifiers, only one identifier, or neither identifier.
@@ -74,7 +74,7 @@ Mira joins this data using the study ID and the corresponding source label. For 
 A curated key can contain more than one drug or disease identifier. Mira retains all unique identifiers and expands the report internally so that each mapping can be represented before the nested `drugs` and `diseases` fields are rebuilt.
 
 > [!WARNING]
-> The current extraction helper is [`extract_chembl_ct_curation`](../src/mira/provider/chembl/curation.py). It reads private ChEMBL Oracle curation and produces the five-column input above. This is a legacy internal process intended for deprecation. Public and new workflows should omit `chembl_curation` and continue with OnToma mapping.
+> The current extraction helper is [`extract_chembl_ct_curation`](https://github.com/opentargets/mira/blob/main/src/mira/provider/chembl/curation.py). It reads private ChEMBL Oracle curation and produces the five-column input above. This is a legacy internal process intended for deprecation. Public and new workflows should omit `chembl_curation` and continue with OnToma mapping.
 
 ## Direct label mapping
 
@@ -111,11 +111,11 @@ flowchart TD
     RIB --> RIBMAP["CHEMBL1643"]
     AID ~~~ P
 
-    style ANER fill:#fce8dc,stroke:#c97a50,color:#8b3a10
-    style PNER fill:#fce8dc,stroke:#c97a50,color:#8b3a10
-    style AID fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style PEGMAP fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style RIBMAP fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
+    style ANER fill:#714329,stroke:#ffb37c,color:#fff7f0
+    style PNER fill:#714329,stroke:#ffb37c,color:#fff7f0
+    style AID fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style PEGMAP fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style RIBMAP fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
 ```
 
 > [!NOTE]
@@ -183,6 +183,6 @@ When reports are aggregated, a Clinical Indication records the outcome as `FULLY
 
 ## Implementation reference
 
-The public entry point is [`ClinicalReport.map_entities`](../src/mira/dataset/clinical_report.py). It expands the nested drug and disease fields, delegates mapping to [`mira.utils.mapping`](../src/mira/utils/mapping.py), and rebuilds the Clinical Report structure.
+The public entry point is [`ClinicalReport.map_entities`](https://github.com/opentargets/mira/blob/main/src/mira/dataset/clinical_report.py). It expands the nested drug and disease fields, delegates mapping to [`mira.utils.mapping`](https://github.com/opentargets/mira/blob/main/src/mira/utils/mapping.py), and rebuilds the Clinical Report structure.
 
-The lower-level implementation contains the curation join, OnToma lookups, drug NER fallback, and NER cache. Provider-specific disease extraction is visible in the [EMA](../src/mira/provider/ema.py) and [PMDA](../src/mira/provider/pmda.py) implementations.
+The lower-level implementation contains the curation join, OnToma lookups, drug NER fallback, and NER cache. Provider-specific disease extraction is visible in the [EMA](https://github.com/opentargets/mira/blob/main/src/mira/provider/ema.py) and [PMDA](https://github.com/opentargets/mira/blob/main/src/mira/provider/pmda.py) implementations.

@@ -42,5 +42,5 @@ The active-ingredient and NER-derived disease labels initially have null identif
 
 ## Implementation reference
 
-- [PMDA provider](../../src/mira/provider/pmda.py)
-- [Default workflow](../../src/mira/recipe/clinical_report_generation.yaml)
+- [PMDA provider](https://github.com/opentargets/mira/blob/main/src/mira/provider/pmda.py)
+- [Default workflow](https://github.com/opentargets/mira/blob/main/src/mira/recipe/clinical_report_generation.yaml)

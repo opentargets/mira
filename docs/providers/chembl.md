@@ -61,6 +61,6 @@ The shared [entity-mapping stage](../entity-mapping.md) preserves identifiers al
 
 ## Implementation reference
 
-- [Indication provider](../../src/mira/provider/chembl/indications.py)
-- [Drug-warning provider](../../src/mira/provider/chembl/drug_warnings.py)
-- [Default workflow](../../src/mira/recipe/clinical_report_generation.yaml)
+- [Indication provider](https://github.com/opentargets/mira/blob/main/src/mira/provider/chembl/indications.py)
+- [Drug-warning provider](https://github.com/opentargets/mira/blob/main/src/mira/provider/chembl/drug_warnings.py)
+- [Default workflow](https://github.com/opentargets/mira/blob/main/src/mira/recipe/clinical_report_generation.yaml)

@@ -38,10 +38,10 @@ flowchart TD
     REPLACE --> SELECT
     SELECT --> REPORT["One Clinical Report per NCT ID<br/>with nested drugs and diseases"]
 
-    style S fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style I fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style C fill:#c8f0e8,stroke:#3a9e82,color:#1a5c4a
-    style REPORT fill:#dcd8f5,stroke:#7b6fc4,color:#3b2e8a
+    style S fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style I fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style C fill:#1f5d50,stroke:#7ed6c4,color:#f2fbf8
+    style REPORT fill:#4b4375,stroke:#b9aeef,color:#f8f6ff
 ```
 
 ## Required tables
@@ -212,7 +212,7 @@ See [Generate data with Python](../generate-with-python.md) for a complete examp
 
 ## Generate reports with the CLI
 
-The packaged [`aact_clinical_report` recipe](../../src/mira/recipe/aact_clinical_report.yaml) selects one NCT ID at the database and creates both output datasets:
+The packaged [`aact_clinical_report` recipe](https://github.com/opentargets/mira/blob/main/src/mira/recipe/aact_clinical_report.yaml) selects one NCT ID at the database and creates both output datasets:
 
 ```bash
 MIRA_AACT_STUDY_ID=NCT05188521 \
@@ -225,8 +225,8 @@ See [CLI and YAML configuration](../cli-and-configuration.md#run-one-aact-study)
 
 The provider implementation is split into three public functions:
 
-- [`process_interventions`](../../src/mira/provider/aact/clinical_report.py) applies intervention selection and creates `drugFromSource`.
-- [`process_conditions`](../../src/mira/provider/aact/clinical_report.py) applies condition selection and creates `diseaseFromSource`.
-- [`extract_clinical_report`](../../src/mira/provider/aact/clinical_report.py) joins the inputs, adds metadata, applies optional LLM replacement, and creates the Clinical Report.
+- [`process_interventions`](https://github.com/opentargets/mira/blob/main/src/mira/provider/aact/clinical_report.py) applies intervention selection and creates `drugFromSource`.
+- [`process_conditions`](https://github.com/opentargets/mira/blob/main/src/mira/provider/aact/clinical_report.py) applies condition selection and creates `diseaseFromSource`.
+- [`extract_clinical_report`](https://github.com/opentargets/mira/blob/main/src/mira/provider/aact/clinical_report.py) joins the inputs, adds metadata, applies optional LLM replacement, and creates the Clinical Report.
 
 These functions describe transformation behavior. The CLI database loader and connection configuration are documented separately so that a future input-acquisition command can replace the operational setup without changing the provider contract.

@@ -63,6 +63,9 @@ dev = [
     "ipykernel>=6.29.5",
     "pre-commit>=4.6.0",
 ]
+docs = [
+    "zensical>=0.0.62,<0.1",
+]
 
 [tool.ruff.lint]
 select = ["F", "I"]
