@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 import polars as pl
 from loguru import logger
 
@@ -16,10 +18,14 @@ def construct_db_uri(
     db_uri: str,
     db_user: str | None = None,
     db_password: str | None = None,
-):
-    """Constructs a database URI from the given parameters."""
+) -> str:
+    """Construct a database URI, requiring complete credentials when supplied."""
+    if bool(db_user) != bool(db_password):
+        raise ValueError("db_user and db_password must be set together")
     if db_user and db_password:
-        return f"{db_type}://{db_user}:{db_password}@{db_uri}"
+        user = quote(db_user, safe="")
+        password = quote(db_password, safe="")
+        return f"{db_type}://{user}:{password}@{db_uri}"
     return f"{db_type}://{db_uri}"
 
 
@@ -39,7 +45,8 @@ def _build_select_query(
         select_cols: List of columns or a raw
         limit: Optional row limit.
         dialect: "generic" uses SQL LIMIT. "oracle" uses FETCH FIRST.
-        where_clause: Optional WHERE clause (without the WHERE keyword).
+        where_clause: Optional raw SQL WHERE clause (without the WHERE keyword).
+            It is intentionally interpolated as supplied by the caller.
 
     Returns:
         SQL query string.
@@ -56,6 +63,7 @@ def _build_select_query(
         query += f" WHERE {where_clause}"
 
     if limit is not None:
+        limit = int(limit)
         if dialect.lower() == "oracle":
             query += f" FETCH FIRST {limit} ROWS ONLY"
         else:
