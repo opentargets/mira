@@ -5,3 +5,4 @@ outputs/**
 *.pyc
 notebooks/**
 .cache
+site/

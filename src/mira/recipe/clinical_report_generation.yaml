@@ -15,16 +15,15 @@
 inputs:
   chembl_curation:
     format: parquet
-    path: ${oc.env:HOME}/EBI/repos/pipeline_work/input/clinical_report/chembl_mapping.parquet
+    path: ${datasets.chembl_curation_path}
   molecule_index_spark:
     format: parquet
+    engine: spark
     path: ${datasets.molecule_index_path}
   disease_index_spark:
     format: parquet
+    engine: spark
     path: ${datasets.disease_index_path}
-  llm_results:
-    format: json
-    path: ${datasets.llm_results}
 
   studies:
     format: db_table

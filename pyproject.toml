@@ -1,6 +1,6 @@
 [project]
 name = "opentargets-mira"
-version = "0.10.0"
+version = "1.0.0"
 description = "Clinical trial data mining and integration for drug discovery"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -62,6 +62,9 @@ dev = [
     "pytest-asyncio>=0.24.0",
     "ipykernel>=6.29.5",
     "pre-commit>=4.6.0",
+]
+docs = [
+    "zensical>=0.0.62,<0.1",
 ]
 
 [tool.ruff.lint]

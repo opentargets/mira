@@ -15,27 +15,28 @@
 db_properties:
   aact:
     type: postgresql
-    uri: localhost:5432/aact
-    schema: ctgov
+    uri: ${oc.env:AACT_DB_URI,localhost:5432/aact}
+    schema: ${oc.env:AACT_DB_SCHEMA,ctgov}
     user: ${oc.env:AACT_USER,""}
     password: ${oc.env:AACT_PASSWORD,""}
 
   chembl:
     type: postgresql
-    uri: localhost:5432/chembl_36
-    schema: public
-    user: null
-    password: null
+    uri: ${oc.env:CHEMBL_DB_URI,localhost:5432/chembl_37}
+    schema: ${oc.env:CHEMBL_DB_SCHEMA,public}
+    user: ${oc.env:CHEMBL_USER,""}
+    password: ${oc.env:CHEMBL_PASSWORD,""}
 
 # Path Definitions for Local Datasets
 datasets:
   data_root: ${oc.env:MIRA_DATA_DIR,data}
-  disease_index_path: ${oc.env:HOME}/EBI/repos/pipeline_work/output/disease
-  molecule_index_path: ${oc.env:HOME}/EBI/repos/pipeline_work/intermediate/chembl_molecule
+  disease_index_path: ${datasets.data_root}/inputs/disease
+  molecule_index_path: ${datasets.data_root}/inputs/drug_molecule
+  chembl_curation_path: ${datasets.data_root}/inputs/chembl_mapping.parquet
   ttd_path: ${datasets.data_root}/inputs/P1-05-Drug_disease.txt
   ema_path: ${datasets.data_root}/inputs/medicines-output-medicines-report_en.xlsx
   pmda_path: ${datasets.data_root}/inputs/pmda_approvals.pdf
-  llm_results: ${oc.env:HOME}/EBI/repos/pipeline_work/input/clinical_report/aact_extraction_batch_results
+  llm_results: ${datasets.data_root}/inputs/aact_extraction_batch_results
   output_path: ${datasets.data_root}/outputs
 
 # Workflow (populated by recipes)
