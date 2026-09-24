@@ -1,6 +1,7 @@
 """Extraction of clinical reports from ChEMBL drug/indications dataset."""
 
 import polars as pl
+import polars_hash as plh
 
 from mira.dataset import ClinicalReport
 from mira.dataset.clinical_report import APPROVAL_SOURCES
@@ -42,7 +43,7 @@ def extract_clinical_report(
             id=(
                 pl.when(pl.col("ref_type") == "INN")
                 .then(
-                    pl.concat_str(
+                    plh.concat_str(
                         pl.col("ref_id"),
                         pl.lit("/"),
                         pl.col("efo_term"),
@@ -92,6 +93,15 @@ def extract_clinical_report(
             type=pl.lit(ClinicalReportType.INDICATION.value),
         )
         .explode("id")
+        .with_columns(
+            id=(
+                # ID is hashed when it does not relate to the representation in the primary source
+                pl.when(pl.col("source").is_in(["INN", "FDA", "USAN"]))
+                .then(pl.col("id").chash.sha2_256())
+                # For DalyMed, EMA, ATC - ID remains the original value (can be queried in the primary sources)
+                .otherwise(pl.col("id"))
+            )
+        )
         .unique()
     )
 
