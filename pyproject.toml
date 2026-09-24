@@ -1,6 +1,6 @@
 [project]
 name = "opentargets-mira"
-version = "1.0.0"
+version = "1.0.1"
 description = "Clinical trial data mining and integration for drug discovery"
 readme = "README.md"
 license = { file = "LICENSE" }
