@@ -92,7 +92,7 @@ def extract_clinical_report(
             ),
             type=pl.lit(ClinicalReportType.INDICATION.value),
         )
-        .explode("id")
+        .explode("id", empty_as_null=True)
         .with_columns(
             id=(
                 # ID is hashed when it does not relate to the representation in the primary source

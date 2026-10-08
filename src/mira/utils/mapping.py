@@ -140,8 +140,8 @@ def _apply_chembl_curation_mapping(
             .otherwise(pl.col("__resolved_disease_ids"))
             .alias("__resolved_disease_ids"),
         )
-        .explode("__resolved_drug_ids")
-        .explode("__resolved_disease_ids")
+        .explode("__resolved_drug_ids", empty_as_null=True)
+        .explode("__resolved_disease_ids", empty_as_null=True)
         .with_columns(
             pl.col("__resolved_drug_ids").alias(drug_id_column_name),
             pl.col("__resolved_disease_ids").alias(disease_id_column_name),
@@ -459,8 +459,8 @@ def map_entities(
             how="left",
             suffix="_drug",
         )
-        .explode("diseaseIds")
-        .explode("drugIds")
+        .explode("diseaseIds", empty_as_null=True)
+        .explode("drugIds", empty_as_null=True)
         .rename(
             {
                 "diseaseIds": f"new_{disease_id_column_name}",

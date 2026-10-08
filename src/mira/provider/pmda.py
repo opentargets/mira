@@ -382,6 +382,7 @@ def extract_clinical_report(
         .explode(
             "extracted_diseases",
             keep_nulls=False,
+            empty_as_null=True,
         )
         # Add active ingredients column
         .with_columns(
@@ -389,7 +390,7 @@ def extract_clinical_report(
             .fill_null("")
             .map_elements(clean_active_ingredients, return_dtype=pl.List(pl.Utf8)),
         )
-        .explode("active_ingredients")
+        .explode("active_ingredients", empty_as_null=True)
         .filter(
             (pl.col("active_ingredients") != "") & (pl.col("extracted_diseases") != "")
         )
