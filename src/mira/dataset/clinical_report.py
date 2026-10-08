@@ -220,7 +220,9 @@ class ClinicalReport:
         """Map entities to IDs."""
         # Explode clinical reports to get lists of study/disease/drug
         exploded_reports = (
-            reports.explode("drugs").explode("diseases").unnest(["drugs", "diseases"])
+            reports.explode("drugs", empty_as_null=True)
+            .explode("diseases", empty_as_null=True)
+            .unnest(["drugs", "diseases"])
         )
 
         mapped_exploded_reports = map_entities(

@@ -67,8 +67,8 @@ class ClinicalIndication:
         return cls(
             df=(
                 # Explode clinical reports to get lists of study/disease/drug
-                report.explode("drugs")
-                .explode("diseases")
+                report.explode("drugs", empty_as_null=True)
+                .explode("diseases", empty_as_null=True)
                 .unnest(["drugs", "diseases"])
                 .rename({"id": "clinicalReportId"})
                 .with_columns(

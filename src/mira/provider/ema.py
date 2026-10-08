@@ -75,7 +75,7 @@ def extract_clinical_report(
             ).toPandas()
         )
         # Explode the extracted diseases
-        .explode("extracted_diseases")
+        .explode("extracted_diseases", empty_as_null=True)
         .rename({"extracted_diseases": "extracted_disease"})
     )
 
@@ -106,8 +106,8 @@ def extract_clinical_report(
                 extract_marketing_year, return_dtype=pl.Int32
             ),
         )
-        .explode("drugFromSource")
-        .explode("diseaseFromSource")
+        .explode("drugFromSource", empty_as_null=True)
+        .explode("diseaseFromSource", empty_as_null=True)
         # After extracting diseases, some rows may have null values (25 currently)
         .filter(
             pl.col("drugFromSource").is_not_null()
