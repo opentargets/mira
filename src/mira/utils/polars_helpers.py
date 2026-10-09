@@ -59,14 +59,14 @@ def convert_polars_to_spark(
 
     if total_rows <= chunk_size:
         # For small DataFrames, use direct conversion with schema
-        return spark.createDataFrame(polars_df.to_pandas(), schema=spark_schema)
+        return spark.createDataFrame(polars_df.rows(), schema=spark_schema)
 
     # Process in chunks for large DataFrames
     spark_chunks = []
 
     for i in range(0, total_rows, chunk_size):
         chunk = polars_df.slice(i, chunk_size)
-        chunk_spark = spark.createDataFrame(chunk.to_pandas(), schema=spark_schema)
+        chunk_spark = spark.createDataFrame(chunk.rows(), schema=spark_schema)
         spark_chunks.append(chunk_spark)
 
     # Union all chunks into single DataFrame
