@@ -1755,7 +1755,7 @@ dependencies = [
     { name = "httpx" },
     { name = "hydra-core" },
     { name = "loguru" },
-    { name = "ontoma", extra = ["ner"] },
+    { name = "ontoma" },
     { name = "openai" },
     { name = "pandas" },
     { name = "pdfplumber" },
@@ -1767,6 +1767,9 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+ner = [
+    { name = "ontoma", extra = ["ner"] },
+]
 oracle = [
     { name = "cx-oracle" },
 ]
@@ -1774,6 +1777,7 @@ oracle = [
 [package.dev-dependencies]
 dev = [
     { name = "ipykernel" },
+    { name = "opentargets-mira", extra = ["ner"] },
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
@@ -1794,7 +1798,8 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.28.0" },
     { name = "hydra-core", specifier = ">=1.3.2" },
     { name = "loguru", specifier = ">=0.7.3" },
-    { name = "ontoma", extras = ["ner"], specifier = ">=2.6.1" },
+    { name = "ontoma", specifier = ">=2.6.1" },
+    { name = "ontoma", extras = ["ner"], marker = "extra == 'ner'", specifier = ">=2.6.1" },
     { name = "openai", specifier = ">=2.37.0" },
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "pdfplumber", specifier = ">=0.11.8" },
@@ -1804,11 +1809,12 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "sqlalchemy", specifier = ">=2.0.42" },
 ]
-provides-extras = ["oracle"]
+provides-extras = ["ner", "oracle"]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "ipykernel", specifier = ">=6.29.5" },
+    { name = "opentargets-mira", extras = ["ner"] },
     { name = "pre-commit", specifier = ">=4.6.0" },
     { name = "pytest", specifier = ">=8.0.0" },
     { name = "pytest-asyncio", specifier = ">=0.24.0" },

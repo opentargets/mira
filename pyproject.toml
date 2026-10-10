@@ -22,7 +22,7 @@ dependencies = [
     "httpx>=0.28.0",
     "hydra-core>=1.3.2",
     "loguru>=0.7.3",
-    "ontoma[ner]>=2.6.1",
+    "ontoma>=2.6.1",
     "pandas>=2.3.3",
     "pdfplumber>=0.11.8",
     "polars>=1.36.1,<3",
@@ -43,6 +43,9 @@ Issues = "https://github.com/opentargets/mira/issues"
 mira = "mira.cli:main"
 
 [project.optional-dependencies]
+ner = [
+    "ontoma[ner]>=2.6.1",
+]
 oracle = [
     "cx-oracle>=8.3.0",
 ]
@@ -56,6 +59,7 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
+    "opentargets-mira[ner]",
     "ruff>=0.15.20",
     "ty>=0.0.15",
     "pytest>=8.0.0",

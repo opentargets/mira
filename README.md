@@ -26,8 +26,10 @@ Mira turns records from clinical-data providers into traceable Clinical Reports 
 ## Installation
 
 ```bash
-pip install opentargets-mira
+pip install "opentargets-mira[ner]"
 ```
+
+The `ner` extra installs the named-entity recognition models (PyTorch and Transformers) that drug and disease mapping, the EMA and PMDA providers and the `mira` CLI need. Without it, only the parts of Mira that do not touch NER can be imported.
 
 For the optional legacy ChEMBL Oracle curation utilities:
 
