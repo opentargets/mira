@@ -17,11 +17,13 @@ The documentation is being developed around three questions:
 
 ## Installation
 
-Install the core package from PyPI:
+Install the package from PyPI with its NER extra:
 
 ```bash
-pip install opentargets-mira
+pip install "opentargets-mira[ner]"
 ```
+
+The `ner` extra installs the named-entity recognition models (PyTorch and Transformers) that drug and disease mapping, the EMA and PMDA providers and the `mira` CLI need. Without it, only the parts of Mira that do not touch NER can be imported.
 
 The legacy private ChEMBL Oracle curation utilities require the optional Oracle extra:
 
