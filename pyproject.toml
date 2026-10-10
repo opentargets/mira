@@ -16,7 +16,6 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
 dependencies = [
-    "altair>=5.5.0",
     "connectorx>=0.4.3",
     "fastexcel>=0.16.0",
     "httpx>=0.28.0",
@@ -29,7 +28,6 @@ dependencies = [
     "polars-hash>=0.5.5",
     "pyarrow>=22.0.0",
     "pydantic>=2.11.7",
-    "sqlalchemy>=2.0.42",
     "openai>=2.37.0",
     "biopython>=1.87",
 ]
