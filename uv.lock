@@ -1578,7 +1578,7 @@ wheels = [
 
 [[package]]
 name = "ontoma"
-version = "2.6.1"
+version = "2.7.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "loguru" },
@@ -1587,15 +1587,13 @@ dependencies = [
     { name = "pyspark" },
     { name = "spark-nlp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/aa/60/9f0786b892ea896caed4254bd437a7375e7bb9a47edd35f58a29a7c8ddfa/ontoma-2.6.1.tar.gz", hash = "sha256:cb7e303ffe0069f8985e6beba9e42913e2140de9ece5ab752184351b1eb675d7", size = 28619, upload-time = "2026-09-24T13:22:33.757Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1e/a0/23a1b5484424ab00579d8135590c04924de5ac301216de1a716732154e18/ontoma-2.7.1.tar.gz", hash = "sha256:7e7714e568e44e5d55610d8cefaee8a03d2b1ca14152bed708658d299e863814", size = 29900, upload-time = "2026-10-09T14:58:01.582Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1e/a1/d334e4079a5c759ab3ee23fdb46b0400715f06db02793d168658f6deb513/ontoma-2.6.1-py3-none-any.whl", hash = "sha256:ea46ac1c70a6276d769294590d152db1f7c3860f8b0de53ac9a54c6fba0abcee", size = 40456, upload-time = "2026-09-24T13:22:32.395Z" },
+    { url = "https://files.pythonhosted.org/packages/c4/95/40d20ba607be892192ae76f8734e614e808cb7589cd9097d57637bcb91a8/ontoma-2.7.1-py3-none-any.whl", hash = "sha256:5927ddbac229ac716ef2c1b5e7ef019ad5e0dd47e4fc2bf7ea82b569c28219cb", size = 42156, upload-time = "2026-10-09T14:58:00.287Z" },
 ]
 
 [package.optional-dependencies]
 ner = [
-    { name = "pandas" },
-    { name = "pyarrow" },
     { name = "rapidfuzz" },
     { name = "sentencepiece" },
     { name = "torch" },
@@ -2048,11 +2046,11 @@ wheels = [
 
 [[package]]
 name = "py4j"
-version = "0.10.9.7"
+version = "0.10.9.9"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/1e/f2/b34255180c72c36ff7097f7c2cdca02abcbd89f5eebf7c7c41262a9a0637/py4j-0.10.9.7.tar.gz", hash = "sha256:0b6e5315bb3ada5cf62ac651d107bb2ebc02def3dee9d9548e3baac644ea8dbb", size = 1508234, upload-time = "2022-08-12T22:49:09.792Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/38/31/0b210511177070c8d5d3059556194352e5753602fa64b85b7ab81ec1a009/py4j-0.10.9.9.tar.gz", hash = "sha256:f694cad19efa5bd1dee4f3e5270eb406613c974394035e5bfc4ec1aba870b879", size = 761089, upload-time = "2025-01-15T03:53:18.624Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/10/30/a58b32568f1623aaad7db22aa9eafc4c6c194b429ff35bdc55ca2726da47/py4j-0.10.9.7-py2.py3-none-any.whl", hash = "sha256:85defdfd2b2376eb3abf5ca6474b51ab7e0de341c75a02f46dc9b5976f5a5c1b", size = 200481, upload-time = "2022-08-12T22:49:07.05Z" },
+    { url = "https://files.pythonhosted.org/packages/bd/db/ea0203e495be491c85af87b66e37acfd3bf756fd985f87e46fc5e3bf022c/py4j-0.10.9.9-py2.py3-none-any.whl", hash = "sha256:c7c26e4158defb37b0bb124933163641a2ff6e3a3913f7811b0ddbe07ed61533", size = 203008, upload-time = "2025-01-15T03:53:15.648Z" },
 ]
 
 [[package]]
@@ -2277,12 +2275,12 @@ wheels = [
 
 [[package]]
 name = "pyspark"
-version = "3.5.7"
+version = "4.1.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "py4j" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cb/65/2764b1840aa6ea5f7e668a36702c3128ac54d0b861d3d57669b2453469a6/pyspark-3.5.7.tar.gz", hash = "sha256:80e36514e0c5c126d35a26adf4f405cd4a69de96a8ea8a3c1e9a65fce2fb4eaa", size = 317370347, upload-time = "2025-09-23T19:46:10.326Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a7/ae/33e589ae3cf03c2e9bb78139de00bdfbdc083ebc45b9a4c282f5e33efe70/pyspark-4.1.3.tar.gz", hash = "sha256:b600238e771e45618a58beaf9d63cfd9aa06f61ce193244cedf890a04a4409f7", size = 455504008, upload-time = "2026-07-15T10:39:01.647Z" }
 
 [[package]]
 name = "pytest"
@@ -2836,11 +2834,11 @@ wheels = [
 
 [[package]]
 name = "spark-nlp"
-version = "6.1.5"
+version = "7.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/2f/59/d2baa1374420931b79954422c31b366aa6609a283747d11fdda3c5ebeede/spark_nlp-6.1.5.tar.gz", hash = "sha256:834e5b785d6f1c6deb48195d88d11ae45433bb398dc632a63106e08fbe6f9273", size = 361503, upload-time = "2025-10-09T07:20:46.244Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a4/f4/cb5a53f3a332a4b6f95c958c789a090c6350598766747d2fca89e89a12ef/spark_nlp-7.0.0.tar.gz", hash = "sha256:8c405447e2e68ca120ae4aacce620ed4c8f8807c070ebacbac55c3dbdc2b9bc5", size = 396160, upload-time = "2026-09-23T19:52:28.135Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7e/8b/2c13b6f88403bfe4c698eeb81229c9bef33b09c1aff2f22b3c68f1afb4e5/spark_nlp-6.1.5-py2.py3-none-any.whl", hash = "sha256:e62fd7306158b30f24915a79ee149f62dce3bcab1b56d12f5635506d2824169f", size = 741476, upload-time = "2025-10-09T07:20:43.805Z" },
+    { url = "https://files.pythonhosted.org/packages/6d/7c/952c0f9b7f6652a87d6d04e5d6477eb791951e8bc21fd6358c4da79f605e/spark_nlp-7.0.0-py2.py3-none-any.whl", hash = "sha256:5507de3bb2ae28c353da7dbe6d80f3986379f6ab62c925e7e52800aa4bc6e3ba", size = 794338, upload-time = "2026-09-23T19:52:26.617Z" },
 ]
 
 [[package]]
