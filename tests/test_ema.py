@@ -1,5 +1,5 @@
-import pandas as pd
 import polars as pl
+import pyarrow as pa
 import pytest
 
 from mira.provider import ema
@@ -44,12 +44,13 @@ def _fake_ner(extracted: dict[str, list[str]]):
         def __init__(self, df: pl.DataFrame):
             self.df = df
 
-        def toPandas(self) -> pd.DataFrame:
-            out = self.df.to_pandas()
-            out["extracted_diseases"] = [
-                extracted[text] for text in out["therapeutic_indication"]
-            ]
-            return out
+        def toArrow(self) -> pa.Table:
+            return self.df.with_columns(
+                extracted_diseases=pl.Series(
+                    [extracted[text] for text in self.df["therapeutic_indication"]],
+                    dtype=pl.List(pl.String),
+                )
+            ).to_arrow()
 
     def extract_disease_entities(spark, df, input_col, output_col):
         return _Result(df)

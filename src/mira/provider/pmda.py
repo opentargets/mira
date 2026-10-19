@@ -363,7 +363,7 @@ def extract_clinical_report(
     """Extract clinical reports from PMDA approvals."""
     reports = (
         # Extract disease entities (requires Polars - Spark - Polars conversion)
-        pl.from_pandas(
+        pl.DataFrame(
             extract_disease_entities(
                 spark,
                 df=convert_polars_to_spark(
@@ -376,7 +376,7 @@ def extract_clinical_report(
                 ),
                 input_col="disease_text",
                 output_col="extracted_diseases",
-            ).toPandas()
+            ).toArrow()
         )
         # Explode extracted diseases
         .explode(

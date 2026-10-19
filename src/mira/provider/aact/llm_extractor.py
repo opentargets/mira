@@ -86,7 +86,7 @@ def fetch_publications(
     max_publications: int,
     enabled: bool,
 ) -> dict | None:
-    """Fetch Europe PMC abstracts for trials in the report."""
+    """Fetch PubMed abstracts for trials in the report."""
     if not enabled:
         return None
 

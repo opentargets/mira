@@ -59,7 +59,7 @@ def extract_clinical_report(
     ]
     logger.info("(ema): apply ner to extract diseases from therapeutic indications")
     ner_extracted_indication = (
-        pl.from_pandas(
+        pl.DataFrame(
             extract_disease_entities(
                 spark,
                 df=convert_polars_to_spark(
@@ -72,7 +72,7 @@ def extract_clinical_report(
                 ),
                 input_col="therapeutic_indication",
                 output_col="extracted_diseases",
-            ).toPandas()
+            ).toArrow()
         )
         # Explode the extracted diseases
         .explode("extracted_diseases", empty_as_null=True)
