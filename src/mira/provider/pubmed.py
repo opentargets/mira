@@ -8,6 +8,8 @@ import httpx
 from loguru import logger
 
 EFETCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
+# Contact address NCBI asks E-utilities clients to send alongside the tool name.
+CONTACT_EMAIL = "data@opentarget.org"
 
 
 def _iter_batches(items: list[int | str], batch_size: int) -> list[list[int | str]]:
@@ -80,6 +82,7 @@ def fetch_publications(
                             "rettype": "medline",
                             "retmode": "xml",
                             "tool": "opentargets-mira",
+                            "email": CONTACT_EMAIL,
                         },
                     )
                     response.raise_for_status()
