@@ -29,7 +29,6 @@ dependencies = [
     "pyarrow>=22.0.0",
     "pydantic>=2.11.7",
     "openai>=2.37.0",
-    "biopython>=1.87",
 ]
 
 [project.urls]

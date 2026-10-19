@@ -1,6 +1,10 @@
 """Tests for PubMed publication fetching utilities."""
 
-from unittest.mock import MagicMock, patch
+from contextlib import contextmanager
+from unittest.mock import patch
+from urllib.parse import parse_qs
+
+import httpx
 
 from mira.provider.pubmed import (
     build_publications_map,
@@ -8,53 +12,61 @@ from mira.provider.pubmed import (
 )
 
 # ---------------------------------------------------------------------------
-# Sample Entrez XML parse result (what Entrez.read returns)
+# Sample efetch XML responses
 # ---------------------------------------------------------------------------
 
-SINGLE_ARTICLE = {
-    "PubmedArticle": [
-        {
-            "MedlineCitation": {
-                "PMID": "12345678",
-                "Article": {
-                    "ArticleTitle": "Paper A",
-                    "Abstract": {"AbstractText": ["Abstract", "A."]},
-                },
-            }
-        },
-    ],
-}
 
-TWO_ARTICLES = {
-    "PubmedArticle": [
-        {
-            "MedlineCitation": {
-                "PMID": "12345678",
-                "Article": {
-                    "ArticleTitle": "Paper A",
-                    "Abstract": {"AbstractText": ["Abstract", "A."]},
-                },
-            }
-        },
-        {
-            "MedlineCitation": {
-                "PMID": "99999999",
-                "Article": {
-                    "ArticleTitle": "Paper B",
-                    "Abstract": {"AbstractText": ["Abstract", "B."]},
-                },
-            }
-        },
-    ],
-}
+def _article(pmid: str, title: str, abstract_chunks: list[str] | None) -> str:
+    abstract = ""
+    if abstract_chunks is not None:
+        texts = "".join(
+            f"<AbstractText>{chunk}</AbstractText>" for chunk in abstract_chunks
+        )
+        abstract = f"<Abstract>{texts}</Abstract>"
+    return (
+        "<PubmedArticle><MedlineCitation>"
+        f'<PMID Version="1">{pmid}</PMID>'
+        f"<Article><ArticleTitle>{title}</ArticleTitle>{abstract}</Article>"
+        "</MedlineCitation></PubmedArticle>"
+    )
 
 
-def _mock_entrez_read(data):
-    """Return a fake handle whose .read() returns *data*."""
-    handle = MagicMock()
-    handle.__enter__.return_value = handle
-    handle.__exit__.return_value = None
-    return handle
+def _article_set(*articles: str) -> bytes:
+    return f"<PubmedArticleSet>{''.join(articles)}</PubmedArticleSet>".encode()
+
+
+SINGLE_ARTICLE = _article_set(_article("12345678", "Paper A", ["Abstract", "A."]))
+
+TWO_ARTICLES = _article_set(
+    _article("12345678", "Paper A", ["Abstract", "A."]),
+    _article("99999999", "Paper B", ["Abstract", "B."]),
+)
+
+
+@contextmanager
+def _mock_efetch(*responses):
+    """Serve *responses* in order from efetch; exceptions are raised instead of returned."""
+    calls: list[httpx.Request] = []
+    queue = list(responses)
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(request)
+        response = queue.pop(0)
+        if isinstance(response, Exception):
+            raise response
+        return response
+
+    real_client = httpx.Client
+    with (
+        patch(
+            "mira.provider.pubmed.httpx.Client",
+            lambda **kwargs: real_client(
+                transport=httpx.MockTransport(handler), **kwargs
+            ),
+        ),
+        patch("mira.provider.pubmed.time.sleep"),
+    ):
+        yield calls
 
 
 # ---------------------------------------------------------------------------
@@ -67,57 +79,76 @@ def test_fetch_publications_empty_list():
 
 
 def test_fetch_publications_success():
-    handle = _mock_entrez_read(TWO_ARTICLES)
-    with (
-        patch("mira.provider.pubmed.Entrez.efetch", return_value=handle),
-        patch("mira.provider.pubmed.Entrez.read", return_value=TWO_ARTICLES),
-    ):
+    with _mock_efetch(httpx.Response(200, content=TWO_ARTICLES)) as calls:
         result = fetch_publications([12345678, 99999999])
 
     assert result["12345678"]["title"] == "Paper A"
     assert result["12345678"]["abstractText"] == "Abstract A."
     assert result["99999999"]["title"] == "Paper B"
     assert result["99999999"]["abstractText"] == "Abstract B."
+    assert parse_qs(calls[0].content.decode())["id"] == ["12345678,99999999"]
 
 
 def test_fetch_publications_missing_abstract_becomes_empty_string():
-    no_abstract = {
-        "PubmedArticle": [
-            {
-                "MedlineCitation": {
-                    "PMID": "11111111",
-                    "Article": {"ArticleTitle": "Title only"},
-                }
-            }
-        ],
-    }
-    handle = _mock_entrez_read(no_abstract)
-    with (
-        patch("mira.provider.pubmed.Entrez.efetch", return_value=handle),
-        patch("mira.provider.pubmed.Entrez.read", return_value=no_abstract),
-    ):
+    no_abstract = _article_set(_article("11111111", "Title only", None))
+    with _mock_efetch(httpx.Response(200, content=no_abstract)):
         result = fetch_publications([11111111])
 
     assert result["11111111"]["title"] == "Title only"
     assert result["11111111"]["abstractText"] == ""
 
 
-def test_fetch_publications_retries_on_incomplete_read(capsys):
-    from http.client import IncompleteRead
+def test_fetch_publications_keeps_text_inside_inline_markup():
+    markup = _article_set(
+        _article("22222222", "Effect of <i>TP53</i>", ["CO<sub>2</sub> levels."])
+    )
+    with _mock_efetch(httpx.Response(200, content=markup)):
+        result = fetch_publications([22222222])
 
-    handle = _mock_entrez_read(SINGLE_ARTICLE)
-    efetch = MagicMock(side_effect=[IncompleteRead(b""), handle])
-    with (
-        patch("mira.provider.pubmed.Entrez.efetch", efetch),
-        patch(
-            "mira.provider.pubmed.Entrez.read",
-            return_value=SINGLE_ARTICLE,
-        ),
-    ):
+    assert result["22222222"]["title"] == "Effect of TP53"
+    assert result["22222222"]["abstractText"] == "CO2 levels."
+
+
+def test_fetch_publications_batches_requests():
+    with _mock_efetch(
+        httpx.Response(200, content=_article_set(_article("1", "One", ["A"]))),
+        httpx.Response(200, content=_article_set(_article("2", "Two", ["B"]))),
+    ) as calls:
+        result = fetch_publications([1, 2], batch_size=1)
+
+    assert set(result) == {"1", "2"}
+    assert len(calls) == 2
+
+
+def test_fetch_publications_retries_on_transport_error():
+    with _mock_efetch(
+        httpx.RemoteProtocolError("incomplete read"),
+        httpx.Response(200, content=SINGLE_ARTICLE),
+    ) as calls:
         result = fetch_publications([12345678], max_retries=2)
 
     assert result["12345678"]["title"] == "Paper A"
-    assert efetch.call_count == 2
+    assert len(calls) == 2
+
+
+def test_fetch_publications_retries_on_server_error():
+    with _mock_efetch(
+        httpx.Response(503),
+        httpx.Response(200, content=SINGLE_ARTICLE),
+    ) as calls:
+        result = fetch_publications([12345678], max_retries=2)
+
+    assert result["12345678"]["title"] == "Paper A"
+    assert len(calls) == 2
+
+
+def test_fetch_publications_does_not_retry_client_error(capsys):
+    with _mock_efetch(httpx.Response(400)) as calls:
+        result = fetch_publications([12345678], max_retries=2)
+
+    assert result == {}
+    assert len(calls) == 1
+    assert "efetch failed" in capsys.readouterr().err
 
 
 # ---------------------------------------------------------------------------

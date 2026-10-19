@@ -1,11 +1,13 @@
-"""PubMed publication fetching utilities using Entrez API."""
+"""PubMed publication fetching utilities using the NCBI E-utilities API."""
 
 import sys
 import time
-from http.client import IncompleteRead
+import xml.etree.ElementTree as ET
 
-from Bio import Entrez
+import httpx
 from loguru import logger
+
+EFETCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
 
 
 def _iter_batches(items: list[int | str], batch_size: int) -> list[list[int | str]]:
@@ -13,75 +15,109 @@ def _iter_batches(items: list[int | str], batch_size: int) -> list[list[int | st
     return [items[i : i + batch_size] for i in range(0, len(items), batch_size)]
 
 
+def _is_retryable(exc: Exception) -> bool:
+    """Whether a failed efetch call is worth retrying (network or server-side error)."""
+    if isinstance(exc, httpx.TransportError):
+        return True
+    if isinstance(exc, httpx.HTTPStatusError):
+        return exc.response.status_code == 429 or exc.response.status_code >= 500
+    return False
+
+
+def _element_text(element: ET.Element | None) -> str:
+    """Return all text of an element, including text nested in inline markup."""
+    if element is None:
+        return ""
+    return "".join(element.itertext())
+
+
+def _parse_articles(xml: bytes) -> dict[str, dict]:
+    """Extract title and abstractText per PMID from a PubmedArticleSet document."""
+    publications = {}
+    for article in ET.fromstring(xml).iterfind("PubmedArticle"):
+        citation = article.find("MedlineCitation")
+        if citation is None:
+            continue
+        pmid = citation.findtext("PMID", default="")
+        article_data = citation.find("Article")
+        title = _element_text(
+            article_data.find("ArticleTitle") if article_data is not None else None
+        )
+        abstract_chunks = (
+            article_data.iterfind("Abstract/AbstractText")
+            if article_data is not None
+            else []
+        )
+        abstract = " ".join(_element_text(chunk) for chunk in abstract_chunks)
+        publications[pmid] = {
+            "title": title,
+            "abstractText": abstract,
+        }
+    return publications
+
+
 def fetch_publications(
     pmids: list[int | str], batch_size: int = 1_000, max_retries: int = 2
 ) -> dict[str, dict]:
-    """Fetch title and abstractText the Entrez API for a list of PubMed IDs."""
+    """Fetch title and abstractText from the E-utilities API for a list of PubMed IDs."""
     if not pmids:
         return {}
 
-    Entrez.email = "my_email@example.com"
     publications = {}
     total_batches = (len(pmids) + batch_size - 1) // batch_size
-    for idx, batch in enumerate(_iter_batches(pmids, batch_size=batch_size), start=1):
-        for attempt in range(1, max_retries + 1):
-            try:
-                handle = Entrez.efetch(
-                    db="pubmed",
-                    id=",".join(str(pmid) for pmid in batch),
-                    rettype="medline",
-                    retmode="xml",
-                )
-                records = Entrez.read(handle)
-                handle.close()
-
-                for article in records.get("PubmedArticle", []):
-                    citation = article["MedlineCitation"]
-                    pmid = str(citation["PMID"])
-                    article_data = citation.get("Article", {})
-                    title = str(article_data.get("ArticleTitle", ""))
-                    abstract_chunks = article_data.get("Abstract", {}).get(
-                        "AbstractText", []
+    with httpx.Client(timeout=60.0) as client:
+        for idx, batch in enumerate(
+            _iter_batches(pmids, batch_size=batch_size), start=1
+        ):
+            for attempt in range(1, max_retries + 1):
+                try:
+                    # POST, as large ID lists do not fit in a GET query string.
+                    response = client.post(
+                        EFETCH_URL,
+                        data={
+                            "db": "pubmed",
+                            "id": ",".join(str(pmid) for pmid in batch),
+                            "rettype": "medline",
+                            "retmode": "xml",
+                            "tool": "opentargets-mira",
+                        },
                     )
-                    abstract = " ".join(str(chunk) for chunk in abstract_chunks)
-                    publications[pmid] = {
-                        "title": title,
-                        "abstractText": abstract,
-                    }
+                    response.raise_for_status()
+                    publications.update(_parse_articles(response.content))
 
-                logger.info(
-                    "Fetched PubMed batch {}/{} (size={}, cumulative={})",
-                    idx,
-                    total_batches,
-                    len(batch),
-                    len(publications),
-                )
-                break
-            except IncompleteRead as exc:
-                logger.warning(
-                    "Entrez partial response for batch {}/{} (size={}) attempt {}/{}: {}",
-                    idx,
-                    total_batches,
-                    len(batch),
-                    attempt,
-                    max_retries,
-                    exc,
-                )
-                if attempt < max_retries:
-                    time.sleep(attempt)
-                else:
-                    print(
-                        f"Warning: Entrez fetch failed for batch {idx}/{total_batches} "
-                        f"(size={len(batch)}): {exc}",
-                        file=sys.stderr,
+                    logger.info(
+                        "Fetched PubMed batch {}/{} (size={}, cumulative={})",
+                        idx,
+                        total_batches,
+                        len(batch),
+                        len(publications),
                     )
-            except Exception as exc:
-                print(
-                    f"Warning: Entrez fetch failed for batch {idx}/{total_batches} "
-                    f"(size={len(batch)}): {exc}",
-                    file=sys.stderr,
-                )
-                break
+                    break
+                except Exception as exc:
+                    if not _is_retryable(exc):
+                        print(
+                            f"Warning: efetch failed for batch {idx}/{total_batches} "
+                            f"(size={len(batch)}): {exc}",
+                            file=sys.stderr,
+                        )
+                        break
+                    logger.warning(
+                        "efetch failed for batch {}/{} (size={}) attempt {}/{}: {}",
+                        idx,
+                        total_batches,
+                        len(batch),
+                        attempt,
+                        max_retries,
+                        exc,
+                    )
+                    if attempt < max_retries:
+                        time.sleep(attempt)
+                    else:
+                        print(
+                            f"Warning: efetch failed for batch {idx}/{total_batches} "
+                            f"(size={len(batch)}): {exc}",
+                            file=sys.stderr,
+                        )
 
     return publications
 
