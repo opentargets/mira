@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import polars as pl
+import pyarrow.parquet as pq
 import pyspark.sql.functions as f
 from loguru import logger
 from ontoma import OnToma, OpenTargetsDisease, OpenTargetsDrug
@@ -176,10 +177,10 @@ def _process_mapping_results(mapped_spark_df) -> pl.DataFrame:
         Polars DataFrame with diseaseIds and drugIds columns
     """
     return (
-        pl.from_pandas(
+        pl.DataFrame(
             mapped_spark_df.filter(
                 (f.col("mapped_ids").isNotNull()) & (f.size("mapped_ids") > 0)
-            ).toPandas()
+            ).toArrow()
         )
         .with_columns(
             [
@@ -365,7 +366,7 @@ def map_entities(
 
                 if ner_cache_path is not None:
                     logger.info(f"updating cache: {ner_cache_path}")
-                    ner_extracted_raw.toPandas().to_parquet(ner_cache_path)
+                    pq.write_table(ner_extracted_raw.toArrow(), ner_cache_path)
             else:
                 logger.info(
                     f"all {unmapped_count} labels found in cache, skipping ner extraction"
