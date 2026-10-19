@@ -4,7 +4,7 @@ version = "1.0.5"
 description = "Clinical trial data mining and integration for drug discovery"
 readme = "README.md"
 license = { file = "LICENSE" }
-authors = [{ name = "Open Targets" }]
+authors = [{ name = "Open Targets", email = "data@opentargets.org" }]
 requires-python = ">=3.11"
 keywords = ["clinical-trials", "drug-discovery", "open-targets"]
 classifiers = [

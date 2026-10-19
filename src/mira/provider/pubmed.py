@@ -3,13 +3,29 @@
 import sys
 import time
 import xml.etree.ElementTree as ET
+from email.utils import getaddresses
+from importlib.metadata import PackageNotFoundError, metadata
 
 import httpx
 from loguru import logger
 
 EFETCH_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
-# Contact address NCBI asks E-utilities clients to send alongside the tool name.
-CONTACT_EMAIL = "data@opentarget.org"
+
+
+def _contact_email() -> str | None:
+    """Return the author email from the package metadata (set in pyproject.toml).
+
+    NCBI asks E-utilities clients to send a contact email alongside the tool name.
+    """
+    try:
+        author_emails = metadata("opentargets-mira").get_all("Author-email") or []
+    except PackageNotFoundError:
+        return None
+    addresses = [addr for _, addr in getaddresses(author_emails) if addr]
+    return addresses[0] if addresses else None
+
+
+CONTACT_EMAIL = _contact_email()
 
 
 def _iter_batches(items: list[int | str], batch_size: int) -> list[list[int | str]]:
@@ -74,17 +90,16 @@ def fetch_publications(
             for attempt in range(1, max_retries + 1):
                 try:
                     # POST, as large ID lists do not fit in a GET query string.
-                    response = client.post(
-                        EFETCH_URL,
-                        data={
-                            "db": "pubmed",
-                            "id": ",".join(str(pmid) for pmid in batch),
-                            "rettype": "medline",
-                            "retmode": "xml",
-                            "tool": "opentargets-mira",
-                            "email": CONTACT_EMAIL,
-                        },
-                    )
+                    params = {
+                        "db": "pubmed",
+                        "id": ",".join(str(pmid) for pmid in batch),
+                        "rettype": "medline",
+                        "retmode": "xml",
+                        "tool": "opentargets-mira",
+                    }
+                    if CONTACT_EMAIL:
+                        params["email"] = CONTACT_EMAIL
+                    response = client.post(EFETCH_URL, data=params)
                     response.raise_for_status()
                     publications.update(_parse_articles(response.content))
 

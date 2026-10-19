@@ -88,7 +88,7 @@ def test_fetch_publications_success():
     assert result["99999999"]["abstractText"] == "Abstract B."
     params = parse_qs(calls[0].content.decode())
     assert params["id"] == ["12345678,99999999"]
-    assert params["email"] == ["data@opentarget.org"]
+    assert params["email"] == ["data@opentargets.org"]
 
 
 def test_fetch_publications_missing_abstract_becomes_empty_string():
